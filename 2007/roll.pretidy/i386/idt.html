@@ -1,0 +1,237 @@
+<HTML>
+<HEAD>
+<title>The i386 Interrupt Descriptor Table</title>
+</HEAD>
+
+<body>
+<H1><center>The i386 Interrupt Descriptor Table</center></h1>
+
+<hr>
+
+<h2>Interrupt Descriptor Table</h2>
+
+<p>The <b>Interrupt Descriptor Table (IDT)</b> is an array of 8 byte
+<i>interrupt descriptors</i> in memory devoted
+to specifying (at most) 256 interrupt service routines.  The first 
+32 entries are reserved for 
+<a href="#ProcExcept">processor exceptions</a>, and any 16 of the 
+remaining entries can be used for <a href="#hwInts">hardware interrupts</a>.  
+The rest are available for <i>software interrupts</i>.
+</p>
+
+The address of the IDT is stored in a processor register called the
+<b>IDTR</b>.  You can access this register with the following C functions:
+
+<pre><code>
+void lidt(void *base, unsigned int limit) {
+   unsigned int i[2];
+
+   i[0] = limit << 16;
+   i[1] = (unsigned int) base;
+   asm ("lidt (%0)": :"p" (((char *) i)+2));
+}
+
+void *sidt(void) {
+    unsigned int ptr[2];
+    asm ("sidt (%0)": :"p" (((char *) ptr)+2));
+    return (void *) ptr[1];
+}
+</code></pre>
+
+<p>Note that you can only get the base, and not the size of the current
+IDT, with the sidt() function.  I don't think the limit is very important;
+I keep it set to its maximum value (0x7ff, or 256*8) to avoid problems.
+</p>
+
+<p><b>The IDTR is not initialized by our boot loader.</b>  You must find
+space in memory for it and load it yourself.<p>
+
+<a name="IDTgate"><h3>Interrupt Descriptor Table Entry</h3></a>
+<p>An entry in the IDT takes up two words (64-bits), and is laid out like
+this: </p>
+<br><img src="gate.jpg" alt="IDT Entry bit layout">
+
+<ul>
+<li><b>P</b> - Present.  Needs to be set for working interrupts.
+<li><b>DPL</b> - should be 0 for exceptions and hardware interrupts, 3 for 
+software interrupts callable by applications
+<li><b>Type</b> - a Trap Gate, Interrupt Gate, or Task Gate on the 
+<a href="systbl.html#SystemDesc">System Descriptor List</a> 
+<li><b>DWord-Count</b> - must be 0 for entries in the IDT
+<li><b>Offset in Target Segment</b> - address of interrupt handling routine
+<li><b>Target Segment Selector</b> - Code Segment to run interrupt handler in
+</ul>
+
+<p>The <i>Target Segment Selector</i> needs to be a code segment, probably
+<b>0x08</b> (see the <a href="boot.html#predefsel">predefined selectors</a> 
+in the boot loader).</p>
+
+<p>Exception handlers should either be defined as an <b>Interrupt Gate</b>
+(type = 14) or a <b>Trap Gate</b> (15).  The difference is simple:  
+interrupts are automatically disabled by the processor when an interrupt 
+gate is called, and they are left alone (whether enabled or disabled) for
+ a trap gate.  An entry in the IDT can also be a 
+<b>Task Gate</b> (5), which will cause a context switch when encountered;
+however, exceptions are usually not handled in this manner.
+</p>
+
+<h2>C Exception Handlers</h2>
+
+<p>Exception and interrupt handlers can be straight C functions, as follows:
+
+<pre><code>void GeneralProtectionFault(void);
+void setExceptionHandler(int excnum, void (*handler)(void));
+
+void GeneralProtectionFault(void)
+{
+   /* handle fault, print information, etc. */
+
+   ...
+   /* DOES NOT RETURN */
+}
+
+setExceptionHandler(13, &GeneralProtectionFault);
+</code></pre>
+
+assuming that <code>setExceptionHandler()</code> installs a valid
+entry in the IDT.</p>
+
+<p>This works fine for handlers that do not need to return.  However,
+handlers that must return (page faults, hardware interrupts, and more)
+need to use an assembly wrapper around their C code, for two reasons:
+
+<ul>
+<li>all registers need to be restored to their previous values (which
+is not true of most C functions); and
+<li>the handler needs to be ended differently, including removing an
+error code for some exceptions and returning with an "iret" (interrupt
+return) instruction.
+</ul>
+
+These two conditions could conceivably be satisfied with some well-
+placed inline assembly; however, this requires knowledge of how
+the compiler generates code, which may not be constant. 
+</p>
+
+<p>We can use either global inline assembly (inline assembly instructions
+in a .c file, but outside the scope of any C function), or make a
+seperate .S (assembler) file entirely.  Each exception handler needs 
+its own assembly wrapper, since the only way to determine which exception 
+occurred is by which function has been called.
+</p>
+
+<pre><code>
+.globl asmExc13      ; make this symbol globally accessible
+
+asmExc13:
+    pusha            ; push all registers 
+    
+    call GeneralProtectionFault   ; may need to tweak this symbol, 
+                                  ; depending on how the compiler mangles it 
+    
+    popa             ; restore all registers 
+    add $4, %esp     ; remove error code, only necessary for #8, 10-14 
+    iret             ; and return from exception 
+</code></pre>
+
+<p>You may need to do some tweaking with predeclaring symbols or 
+adding leading underscores, depending on how the compiler mangles
+your function names.
+</p>
+
+<h2>Stack Layout</h2>
+
+<p>The stack layout on entry to an C exception handler is different 
+from a normal C function call, as follows:
+<br>
+<br>
+<table border>
+<tr><th>Location<th>Value on Exception<th>Value on Call</tr>
+<tr><td>%esp+20<td>eFlags<td>4th parameter</tr>
+<tr><td>%esp+16<td>CS<td>3rd parameter</tr>
+<tr><td>%esp+12<td>EIP<td>2nd parameter</tr>
+<tr><td>%esp+8<td>error code<td>1st parameter</tr>
+<tr><td>%esp+4<td>return value<td>return value</tr>
+<tr><td>%esp<td>old frame pointer<td>old frame pointer</tr>
+
+</table>
+<br>
+Note that only exceptions 8 and 10-14 have an error code.  For all the
+rest, EIP is on the top of stack before the assembly wrapper, and 
+everything else is shifted down accordingly.</p>
+
+<p>You can get these values on the stack from a C function by using 
+the following function definition:
+
+<pre><code>struct regs {
+   unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;
+};
+
+/* assembly wrapper with pusha */
+void SavedRegsExceptionHandler(struct regs r, 
+         unsigned int errcode, unsigned int eip, 
+         unsigned int cs, unsigned int eflags);  
+
+/* assembly wrapper without pusha, or direct call to C function */
+void DirectExceptionHandler(unsigned int errcode, unsigned int eip, 
+                      unsigned int cs, unsigned int eflags);  
+</code></pre>
+
+<p>These definitions work by knowing the C stack calling convention and
+then tricking the compiler into generating code that believes it is 
+being passed parameters.  In a way, it is; the processor (and
+assembly wrapper, if there is one) are passing them.
+</p>
+
+<p>
+Exceptions that don't push an error code on the stack need to have
+the "unsigned int errcode" parameter removed from their definitions.
+</p>
+
+<a name="ProcExcept"><h2>Processor Exceptions</h2></a>
+
+<p><b>Exception Types:</b>
+<ul><li><b>Fault</b> - the return address points to the instruction that caused
+the exception.  The exception handler may fix the problem and then restart
+the program, making it look like nothing has happened.
+
+<li><b>Trap</b> - the return address points to the instruction after
+the one that has just completed. 
+
+<li><b>Abort</b> - the return address is not always reliably supplied.  
+A program which causes an <b>abort</b> is never meant to be continued.
+
+</ul>
+
+<table border>
+<tr><th>Number<th>Description<th>Type</tr>
+<tr><td>0<td>Divide-by-zero<td>fault</tr>
+<tr><td>1<td>Debug exception<td>trap or fault</tr>
+<tr><td>2<td>Non-Maskable Interrupt (NMI)<td>trap</tr>
+<tr><td>3<td>Breakpoint (INT 3)<td>trap</tr>
+<tr><td>4<td>Overflow (INTO with EFlags[OF] set)<td>trap</tr>
+<tr><td>5<td>Bound exception (BOUND on out-of-bounds access)<td>trap</tr>
+<tr><td>6<td>Invalid Opcode<td>trap</tr>
+<tr><td>7<td>FPU not available<td>trap</tr>
+<tr><td>8*<td>Double Fault<td>abort</tr>
+<tr><td>9<td>Coprocessor Segment Overrun<td>abort</tr>
+<tr><td>10*<td>Invalid TSS<td>fault</tr> 
+<tr><td>11*<td>Segment not present<td>fault</tr>
+<tr><td>12*<td>Stack exception<td>fault</tr>
+<tr><td>13*<td>General Protection<td>fault or trap</tr>
+<tr><td>14*<td>Page fault<td>fault</tr> 
+<tr><td>15<td>Reserved
+<tr><td>16<td>Floating-point error<td>fault</tr>
+<tr><td>17<td>Alignment Check<td>fault</tr>
+<tr><td>18<td>Machine Check<td>abort</tr>
+<tr><td>19-31<td>Reserved By Intel</tr>
+<tr><td>32-255<td>Available for Software and Hardware Interrupts</tr>
+</table>
+
+*These exceptions have an associated error code.
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

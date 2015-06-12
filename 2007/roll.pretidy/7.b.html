@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+<title>Interupts</title>
+</HEAD>
+
+<body>
+<H1><CENTER>Interupts</center></h1>
+<h3><center>the first part of the seventh chapter in our series 
+on <i>How to Write an Operating System</i></center></h3>
+
+<hr>
+
+<h2>Interrupts</h2>
+
+<p>Modern architectures have a small number of available <i>hardware
+interrupts</i> that devices can use to interrupt the processor when
+they are ready to be attended to.  This is very useful, if not neccessary
+because it aliviates the need to loop while polling devices.  With interupts
+instead of a loop which keeps asking the keyboard if its ready until it is
+you can have the keyboard tell you when input is ready while your OS is doing
+whatever it pleases.
+
+<h2>Processor Implementations</h2>
+
+<ul>
+<li><a href="i386/irq.html">i386</a>
+</ul>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

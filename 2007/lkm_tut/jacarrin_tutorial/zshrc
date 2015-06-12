@@ -1,0 +1,67 @@
+path=( ~/bin:~/usr/bin:~/usr/bin/jdk/bin:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/usr/games:/usr/sbin:/sbin )
+
+alias cball='THIS_DIR=$PWD;cd /; \
+find $THIS_DIR -name "*.c" -o -name "*.h" > $THIS_DIR/.cscope.files ; \
+cd $THIS_DIR;cscope -b -i .cscope.files -f .cscope.out ; \
+ctags -f .tags `cat .cscope.files`; THIS_DIR='
+
+alias prefs='$EDITOR ~/.zshrc'
+alias ls='ls --color=auto'
+alias grep='nocorrect grep --color=auto'
+alias ll='ls -lh'
+export GREP_COLOR='1;35'
+
+#generally useful aliases for zsh
+alias dirs='dirs -v'
+alias ,,='popd > /dev/null'
+
+PS1='%{[01;36m%}%n@%m] %{[00m%}'   #nice light blue prompt
+                                    #the %{'s are used to indicate escape
+                                    #so it does not count the letters
+RPROMPT='%{[01;32m%}%~%{[00m%}'
+
+export PATH=$path
+export FPATH='$FPATH:/usr/share/zsh/4.2.0/functions/Completion:/home/jacarrin/.zfuns'
+export EDITOR='vim'
+export PAGER=less
+export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:*.tex=01;33:*.sxw=01;33:*.sxc=01;33:*.lyx=01;33:*.pdf=0;35:*.ps=00;36:*.asm=1;33:*.S=0;33:*.s=0;33:*.h=0;31:*.c=0;35:*.cxx=0;35:*.cc=0;35:*.C=0;35:*.o=1;30:*.am=1;33:*.py=0;34:'
+
+#set zsh environment options
+cdpath=(.. ~)
+
+setopt EXTENDEDGLOB             # file globbing is awesome
+setopt CORRECT_ALL		# Check my spelling.
+setopt AUTOMENU			# Tab-completion should cycle.
+setopt AUTOLIST			# ... and list the possibilities.
+setopt AUTO_PARAM_SLASH		# Make directories pretty.
+setopt ALWAYS_TO_END		# Push that cursor on completions.
+setopt AUTOCD			# jump to the directory.
+setopt HIST_VERIFY		# Make those history commands nice
+setopt NO_BEEP                  # self explanatory
+setopt AUTO_NAME_DIRS           # change directories  to variable names
+setopt CHASE_LINKS              # if you pwd from a symlink, you get the actual path
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.history
+setopt AUTO_PUSHD
+DIRSTACKSIZE=20
+
+#don't allow core dumps by default,  they are too fat
+limit coredumpsize 0
+
+
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _expand _complete _approximate
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'r:|[._-]=** r:|=**' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+zstyle ':completion:*' use-compctl true
+zstyle :compinstall filename '/home/jacarrin/.zshrc'
+
+autoload -U compinit
+compinit
+# End of lines added by compinstall
+

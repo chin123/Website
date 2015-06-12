@@ -1,0 +1,666 @@
+<html>
+
+<head>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>NE2000 - howto</title>
+</head>
+
+<body bgcolor="#C0C0C0">
+<div align="center"><center>
+
+<table border="0" width="80%" height="7536">
+  <tr>
+    <td align="center" colspan="2" height="37"><font size="5" face="Arial">Porting the NE2000
+    driver to your OS</font></td>
+  </tr>
+  <tr>
+    <td colspan="2" height="21"><hr size="4">
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" height="73"><p align="right">03-03-98</p>
+    <p><font size="4">Introduction</font></td>
+  </tr>
+  <tr>
+    <td width="5%" height="192"></td>
+    <td width="60%" height="192"><font size="2" face="Arial">In order to be fully portable
+    with multiple operating systems, each with it's own style of device drivers, the NE2000
+    driver has been implemented as a collection of C procedures. These can be encapsulated in
+    any OS and should be fully portable.&nbsp; There are a few exceptions, such as assuming
+    that we have direct access to the I/O ports as well as a few procedures and variables that
+    must be defined in your OS.&nbsp; If you have any questions or comments, please feel free
+    to contact me.&nbsp; The NE2000 card is built using the DP8390 chipset by National
+    Semiconductor.&nbsp; For complete theory of operation please see the data sheets and
+    application notes they have available.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="66"><hr>
+    <p><font size="4">Included Files</font></td>
+  </tr>
+  <tr>
+    <td height="383"></td>
+    <td width="60%" height="383"><font size="2" face="Arial">The code includes several header
+    files and one .c file.&nbsp; The ne2000.c file implements the actual code that drives the
+    network interface controller (NIC).&nbsp; It has a corresponding ne2000.h that is it's
+    header file.&nbsp; You should not include this as it is only for the implementation.&nbsp;
+    The rest of the .h files are for the interface and should be included.&nbsp; One important
+    thing to remember is that if you are using a C++ compiler you must</font><p><strong><font
+    size="2" face="Arial">#define __CPP_BINDING</font></strong></p>
+    <p><font size="2" face="Arial">before you <strong>#include &quot;ne2k.h&quot;</strong> so
+    that the symbols are defined using <em>&quot;C&quot;</em> linkage symbols.</font></p>
+    <p><font size="2" face="Arial">Here is a brief description of each file:</font><ul
+    start="1" type="disc">
+      <li><font size="2" face="Arial">ne2000.c - The actual code for the driver</font></li>
+      <li><font size="2" face="Arial">ne2000.h - The implementation header file (don't include
+        this)</font></li>
+      <li><font size="2" face="Arial">ne2k.h - The interface header.&nbsp; This contains the
+        procedures that you can call as well as the data structures and constants that you will
+        need.</font></li>
+      <li><font size="2" face="Arial">err.h - This includes all error codes and defines the return
+        type.&nbsp; If you choose to use C++ it has a nice class that does some nice operator
+        overloading for you to use.</font></li>
+    </ul>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="66"><hr>
+    <p><font size="4">Constants</font></td>
+  </tr>
+  <tr>
+    <td height="568"></td>
+    <td width="60%" height="568"><font size="2" face="Arial">The constants are defined in both
+    <em>ne2k.h </em>and <em>ne2000.h</em>.&nbsp; Most of them you won't need to worry about,
+    but they are all explained here:</font><p><font size="2" face="Arial"><strong>ne2k.h:</strong></font><ul
+    start="1" type="disc">
+      <li><font size="2" face="Arial"><em><strong>LEN_ADDR</strong> - </em>The length of the
+        physical address of the card in bytes.</font></li>
+      <li><font size="2" face="Arial"><em>MAX_TX</em> - The number of buffers to use for
+        transmission.</font></li>
+      <li><font size="2" face="Arial"><em>MAX_PAGESPERPACKET </em>- The maximum pages that can be
+        used for one buffer.</font></li>
+      <li><font size="2" face="Arial"><em>TXPAGES</em> - The number of pages reserved for
+        transmission in the local buffer.</font></li>
+      <li><font size="2" face="Arial"><strong><em>LEN_PROM</em></strong> - The length of the PROM
+        on the card.</font></li>
+      <li><font size="2" face="Arial"><em><strong>LEN_HEADER</strong></em> - The length of the
+        Ethernet frame header</font></li>
+    </ul>
+    <p><font size="2" face="Arial"><strong>ne2000.h:</strong></font><ul start="1" type="disc">
+      <li><font size="2" face="Arial"><em>PSTART</em> - The first page to be used for the circular
+        buffer.</font></li>
+      <li><font size="2" face="Arial"><em>PSTOP</em> - The last page to be used.</font></li>
+      <li><font size="2" face="Arial"><em>PSTARTW</em> - The first page to be used if the card has
+        a 16-bit bus.</font></li>
+      <li><font size="2" face="Arial"><em>PSTOPW</em> - The last page if the card has an 16-bit
+        wordlength.</font></li>
+      <li><font size="2" face="Arial"><em>MAX_LOAD</em> - Maximum things to do in one ISR call per
+        IRQ.</font></li>
+      <li><font size="2" face="Arial"><em>MAX_RX</em> - Maximum pages to receive per call to <em>nic_rx().</em></font></li>
+      <li><font size="2" face="Arial"><em>MIN_LENGTH</em> - The minimum length of one packet.</font></li>
+      <li><font size="2" face="Arial"><strong><em>MAX_LENGTH</em></strong> - The maximum length a
+        packet can be in bytes.</font></li>
+      <li><font size="2" face="Arial"><em>TIMEOUT_DMAMATCH</em> - Timeout for the DMA address
+        mismatch checks.</font></li>
+      <li><font size="2" face="Arial"><em>TIMEOUT_TX</em> - Timeout for the transmitter.</font></li>
+    </ul>
+    <p><font size="2" face="Arial">The rest of the constants are for I/O address offsets for
+    the NE2000 card.&nbsp; There are also some that specify what the the registers are and
+    what the different bits signify.&nbsp; See <em>ne2000.h</em> and the data sheets for more
+    details.</font></p>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="66"><hr>
+    <p><font size="4">Important Data Structures</font></td>
+  </tr>
+  <tr>
+    <td height="78"></td>
+    <td width="60%" height="78"><font size="2" face="Arial">There are some data structures
+    that you will need to know about, and a few that are optional.&nbsp; I will outline them
+    all here.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="28"><em><font size="4">snic</font></em></td>
+  </tr>
+  <tr>
+    <td height="611"></td>
+    <td width="60%" height="611"><pre>struct <strong>snic</strong> {
+   <strong>int iobase;</strong>
+   int pstart, pstop, wordlength, current_page;
+   nic_stat stat;
+   void (*<strong>notify</strong>)(packet_buffer *newpacket);
+   packet_buffer tx_packet[MAX_TX], *last_tx;
+   char busy, send, sending;
+};</pre>
+    <p><small><font face="Arial">This is the most important struct of them all.&nbsp; This
+    represents your actual hardware card.&nbsp; For each NE2000 that is present, you need one
+    of these.&nbsp; This enables you to support multiple cards with the same driver, you just
+    pass different <em>snic</em> structures.&nbsp; One important data member is <em>iobase</em>.
+    &nbsp; This <strong>must</strong> be set to NULL for an uninitialized card.&nbsp; This has
+    to be done explicitly or the resultant behavior is unpredictable.&nbsp; That is the only
+    data member that you have to deal with, are only used by the driver.&nbsp; The rest are as
+    follows:</font></small><ul start="1" type="disc">
+      <li><small><font face="Arial"><em><strong>iobase</strong> - </em>The base I/O address of the
+        NIC.</font></small></li>
+      <li><small><font face="Arial"><em>pstart </em>- The first page in the circular receive
+        buffer on the card.</font></small></li>
+      <li><small><font face="Arial"><em>pstop</em> - The last page in the local circular buffer.</font></small></li>
+      <li><small><font face="Arial"><em>wordlength</em> - 1 if the card has an 8-bit bus, 2 if
+        it's 16-bit.</font></small></li>
+      <li><small><font face="Arial"><em>current_page</em> - The current page in the local on-card
+        buffer.</font></small></li>
+      <li><small><font face="Arial"><em>stat </em>- Statistics for this card.</font></small></li>
+      <li><small><font face="Arial"><em>notify </em>- A pointer to the event handler that you
+        register in <em>nic_register_notify().</em></font></small></li>
+      <li><small><font face="Arial"><em>tx_packet[] </em>- An array of packet buffers used for
+        transmission.</font></small></li>
+      <li><small><font face="Arial"><em>last_tx</em> - A pointer to the transmission buffer.</font></small></li>
+      <li><small><font face="Arial"><em>busy</em> - A semaphore for the <em>nic_send_packet().
+        &nbsp; </em>Note, there is a timeout.</font></small></li>
+      <li><small><font face="Arial"><em>send</em> - An index in the <em>tx_packet[]</em> of the
+        buffer currently being transmitted by the card.</font></small></li>
+      <li><small><font face="Arial"><em>sending - </em>Marks if the NIC is sending or not</font></small></li>
+    </ul>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="28"><em><font size="4">packet_buffer</font></em></td>
+  </tr>
+  <tr>
+    <td height="326"></td>
+    <td width="60%" height="326"><pre>struct <strong>packet_buffer</strong> {
+        uint <strong>len</strong>;
+        uint page;</pre>
+    <pre>	uint <strong>count</strong>;
+        packet_data *<strong>buf</strong>;
+};</pre>
+    <p><small><font face="Arial">This is the structure that you will be using when you want to
+    send a packet over the network.&nbsp; This supports that scatter gather by allowing each
+    layer to simply add a <em>packet_data</em> to the <em>packet_buffer</em>.</font></small><ul
+    start="1" type="disc">
+      <li><small><font face="Arial"><strong><em>len</em></strong> - The length of the data in this
+        buffer.&nbsp; You don't have to calculate this.</font></small></li>
+      <li><small><font face="Arial"><em>page</em> - The page on the local buffer that corresponds
+        with this buffer.&nbsp; You don't have to worry about this.</font></small></li>
+      <li><small><font face="Arial"><em><strong>count</strong> - </em>The number of <em>packet_data
+        </em>segments.</font></small></li>
+      <li><small><font face="Arial"><strong><em>buf </em></strong>- An array of <em>packet_data </em>segments.</font></small></li>
+    </ul>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="28"><em><font size="4">packet_data</font></em></td>
+  </tr>
+  <tr>
+    <td height="246"></td>
+    <td width="60%" height="246"><pre>struct <strong>packet_data</strong> {
+        uint <strong>len</strong>;
+        char <strong>*ptr</strong>;
+};</pre>
+    <p><small><font face="Arial">This structure contains the actual data of the packet. &nbsp;
+    This is also the structure that will be sent to you when we receive a notification.&nbsp;
+    That is,<font face="Arial"> w</font>hen your <em>notify()</em> procedure is triggered.</font></small><ul
+    start="1" type="disc">
+      <li><small><font face="Arial"><strong><em>len</em></strong> - The length of the data in this
+        buffer.</font></small></li>
+      <li><small><font face="Arial"><strong><em>ptr </em></strong>- The actual data.</font></small></li>
+    </ul>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="28"><em><font size="4">nic_stat</font></em></td>
+  </tr>
+  <tr>
+    <td height="288"></td>
+    <td width="60%" height="288"><pre>struct <strong>nic_stat</strong> {
+        long rx_packets;
+        long tx_buffered, tx_packets;
+        nic_error_stat errors;
+};</pre>
+    <p><font size="2" face="Arial">All of the statistics that the driver keeps track of are
+    contained here</font><ul start="1" type="disc">
+      <li><font size="2" face="Arial"><em>rx_packets</em> - Total number of received packets.</font></li>
+      <li><font size="2" face="Arial"><em>tx_buffered</em> - Total number of packets that were
+        buffered to be transmitted.</font></li>
+      <li><font size="2" face="Arial"><em>tx_packets</em> - Total number of transmitted packets.</font></li>
+      <li><font size="2" face="Arial"><em>errors</em> - A data structure that contains error
+        statistics.</font></li>
+    </ul>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="28"><em><font size="4">nic_error_stat</font></em></td>
+  </tr>
+  <tr>
+    <td height="235"></td>
+    <td width="60%" height="235"><pre>struct <strong>nic_error_stat</strong> {
+        long frame_alignment, crc, missed_packets;
+        long rx, rx_size, rx_dropped, rx_fifo, rx_overruns;
+        long tx_collisions;
+        long tx_aborts, tx_carrier, tx_fifo, tx_heartbeat, tx_window;
+};</pre>
+    <p><font size="2" face="Arial">All error statistics are tallied here.&nbsp; Remember to
+    call <em>nic_get_stats()</em> instead of reading directly from the <em>snic</em>. &nbsp;
+    This is so that it can be updated and contain valid data.</font></p>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="28"><em><font size="4">buffer_header</font></em></td>
+  </tr>
+  <tr>
+    <td height="188"></td>
+    <td width="60%" height="188"><pre>struct buffer_header {
+        unsigned char status;
+        unsigned char next;
+        unsigned short count;   /* length of header and packet */
+};</pre>
+    <p><font size="2" face="Arial">The header for a buffer in the local on-card buffer
+    conforms to this format.</font></p>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="66"><hr>
+    <p><font size="4">Interface Procedures</font></td>
+  </tr>
+  <tr>
+    <td height="78"></td>
+    <td width="60%" height="78"><font size="2" face="Arial">These are the procedures that act
+    as an interface to the nic.&nbsp; How they are used and any assumptions they make are
+    described below.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>int nic_detect(int given); </strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="212"></td>
+    <td width="60%" height="212"><font size="2" face="Arial">The use of this function is
+    optional.&nbsp; If you wish to use, or even allow auto-probing of I/O ports then you can
+    use this to detect an NE2000 card in your system.&nbsp; This may return a false positive
+    on other cards that use the <strong>DP8309</strong> chipset.&nbsp; <em>nic_init()</em>
+    will however confirm the PROM signature and verify that is actually dealing with an NE2000
+    or clone.&nbsp; You can pass an I/O address to try as given, but it will also try some
+    common default addresses.&nbsp; It will return the I/O base of the card if one is found or
+    else <strong>ERRNOTFOUND</strong> if it doesn't find one.&nbsp; The default I/O address
+    probed are&nbsp; <strong>0x300</strong>, <strong>0x280</strong>, <strong>0x320</strong>, <strong>0x340</strong>,
+    and <strong>0x360</strong>.&nbsp; Note, this will only find the first NE2000 card on the
+    system, there are no provisions to detect multiple cards on a system.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>int nic_init(snic* nic, int addr, unsigned char *prom, unsigned char *manual);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="177"></td>
+    <td width="60%" height="177"><font size="2" face="Arial">When calling this to initialize
+    the card make sure that <em>nic-&gt;iobase</em> is set to NULL!&nbsp; <em>addr</em> should
+    be set to the I/O base of the card you are initializing, such as what you received from
+    calling <em>nic_detect()</em>.&nbsp; Before calling this you must allocate an array of
+    length <em><strong>LEN_PROM</strong></em> to pass as <em>prom</em>.&nbsp; The <em>nic_init()</em>
+    will copy the contents of the PROM into this buffer for the convenience of the upper
+    layers.&nbsp; You should set <em>manual</em> to NULL.&nbsp; We return <em><strong>NOERR</strong></em>
+    if successful, or <em><strong>ERRNOTFOUND</strong></em> if the signature in PROM does not
+    match the 0x57 of an NE2000 or clone.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_register_notify(snic *nic, void (*newnotify)(packet_data *newpacket))</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="79"></td>
+    <td width="60%" height="79"><font size="2" face="Arial">Call this with an initialized <em>snic</em>
+    and a function pointer to your <em>notify()</em> in order to register it as the event
+    handler the driver will call upon reception of a packet off the network.&nbsp; Note, this
+    passes a <em>packet_data</em>, and not a <em>packet_buffer.</em></font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_start(snic *nic, int promiscuous);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="119"></td>
+    <td width="60%" height="119"><font size="2" face="Arial">After the card is initialized
+    with <em>nic_init() </em>it is fully prepared to receive and send packets, but is not
+    actually started.&nbsp; In order to start the card up just call <em>nic_start()</em>.
+    &nbsp; Pass it a 1 for <em>promiscuous</em> to receive all packets on the network, both
+    broadcast and normal packets sent to any physical address; otherwise set it to 0.
+    &nbsp; Normal mode of operation is not promiscuous.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_stop(snic *nic);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="59"></td>
+    <td width="60%" height="59"><font size="2" face="Arial">Use this to stop the card from
+    receiving packets.&nbsp; Untested.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_isr(snic *nic); </strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="79"></td>
+    <td width="60%" height="79"><font size="2" face="Arial">Your OS must provide the
+    functionality for acknowledging an IRQ.&nbsp; When it gets the appropriate IRQ for the
+    NIC, simply call <em>nic_isr()</em>.&nbsp; That's it!</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>nic_stat nic_get_stats(snic *nic);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="59"></td>
+    <td width="60%" height="59"><font size="2" face="Arial">Call this to get current and
+    up-to-date statistics on the card.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_stat_clear(nic_stat *that);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="119"></td>
+    <td width="60%" height="119"><font size="2" face="Arial">Use this to clear the statistics
+    for the card and reset all fields to zero.&nbsp; Call it in the following manner:</font><pre>nic_stat_clear(nic-&gt;stat);</pre>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>int nic_send_packet(snic *nic, packet_buffer*);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="196"></td>
+    <td width="60%" height="196"><font size="2" face="Arial">After preparing a valid <em>packet_buffer</em>
+    you can use this function to transmit it.&nbsp; It will buffer the data and trigger the
+    transmitter on the card.&nbsp; Since the driver uses more than one transmission buffer
+    (see <em>MAX_TX</em>) you can immediately start sending another packet to the card with
+    the FIFO while it is transmitting the first one over the physical media.&nbsp; If the
+    packet you send is longer than <em><strong>MAX_LENGTH</strong></em> it will return <em><strong>ERRTOOLONG</strong></em>.
+    &nbsp; If the packet is too short it will automatically pad it with 0s.&nbsp; If someone
+    is currently using the DMA to send a packet then <em>nic-&gt;busy</em> is set as a
+    semaphore and will time out by <em>TIMEOUT_TX</em> if the transmitter is stalled and
+    return an <em><strong>ERRTIMEOUT.</strong></em>&nbsp; You may wish to try to reinitialize
+    the card if this occurs.&nbsp; If <em>nic_send()</em> fails we return <strong><em>ERR.
+    &nbsp; </em></strong>It will also spin on a semaphore if someone else is using <em>nic_send_packet()</em>,
+    if it times out then it will return <em><strong>ERRTIMEOUT</strong></em>.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="66"><hr>
+    <p><font size="4">Provided Procedures</font></td>
+  </tr>
+  <tr>
+    <td height="78"></td>
+    <td width="60%" height="78"><font size="2" face="Arial">Your must provide these procedures
+    yourself.&nbsp; They are required by the driver implementation.&nbsp; They are declared in
+    <em><strong>ne2k.h</strong></em>.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="24"><pre><strong>packet_buffer *alloc_buffer(uint count);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="40"></td>
+    <td width="60%" height="40"><font size="2" face="Arial">The driver will call this whenever
+    it needs a buffer.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="24"><pre><strong>packet_data *alloc_buffer_data(uint size);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="111"></td>
+    <td width="60%" height="111"><font size="2" face="Arial">The driver will call this
+    whenever it needs a simple buffer of packet_data.&nbsp; It could be called from <em>nic_rx()</em>.&nbsp;
+    Now, <em>nic_rx() </em>is called from <em>nic_isr()</em> which is the interrupt
+    handler.&nbsp; Because of this you may not wish to use dynamic memory allocation from
+    within an ISR and instead use a pool of available buffers or some other means.&nbsp; The
+    method chosen is up to you.&nbsp; You must make available a memory area of size <em>size</em>
+    and set <em>packet_data-&gt;ptr </em>to point to it.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void free_buffer(packet_buffer *ptr);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="59"></td>
+    <td width="60%" height="59"><font size="2" face="Arial">Simply have this deallocate the
+    buffer or mark it as available or whatever your implementation does.&nbsp; It should also
+    go through and free all of the <em>packet_data</em>'s contained within the <em>packet_buffer</em>.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void free_buffer_data(packet_data *ptr);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="59"></td>
+    <td width="60%" height="59"><font size="2" face="Arial">Simply have this deallocate the
+    buffer or mark it as available or whatever your implementation does.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void cleanup_buffer(packet_buffer *ptr);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="59"></td>
+    <td width="60%" height="59"><font size="2" face="Arial">This should go through and delete
+    of otherwise cleanup the <em>packet_data</em>s within the <em>packet_buffer</em>.&nbsp; It
+    should not, however, delete the <em>packet_buffer</em> passed to it.&nbsp; This must
+    remain available to the driver.</font><p><font size="2" face="Arial">Technical note: The
+    driver core maintains an array of packets currently being transmitted.&nbsp; When one is
+    finished being send over the wire a <em>nic_tx</em> interrupt is generated.&nbsp; If it
+    needs to retransmit, then the packet is available otherwise it cleans up the buffer.
+    &nbsp; Because the buffer is in an array this proc is required.</font></p>
+    <p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void notify(packet_data *ptr);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="59"></td>
+    <td width="60%" height="59"><font size="2" face="Arial">Register this as the event handler
+    by calling <em>nic_register_notify()</em>.&nbsp; Whenever the card receives a packet it
+    packages it up and passes it on to this function.&nbsp; You can do what you wish to the
+    packet after you receive it, but remember that you control the buffer's scope.&nbsp; That
+    means you have to free up the buffer by calling <em>free_buffer()</em> when you are done
+    with it.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="66"><hr>
+    <p><font size="4">Implementation Procedures</font></td>
+  </tr>
+  <tr>
+    <td height="78"></td>
+    <td width="60%" height="78"><font size="2" face="Arial">These procedures are declared in <strong><em>ne2000.h
+    </em></strong>and are only used by the driver implementation.&nbsp; Thus, you don't have
+    to worry about them.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>int nic_probe(int addr);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="60"></td>
+    <td width="60%" height="60"><font size="2" face="Arial"><em>nic_detect() </em>calls this
+    to probe an addr in I/O space for a DP8390 card.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>int nic_dump_prom(snic *nic, unsigned char *prom);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="78"></td>
+    <td width="60%" height="78"><font size="2" face="Arial">This dumps the <strong>PROM</strong>
+    on the card into the provided buffer.&nbsp; It returns the wordlength of the card's bus.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_overrun(snic *nic);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="98"></td>
+    <td width="60%" height="98"><font size="2" face="Arial">If the circular local receive
+    buffer overruns, then an interrupt is generated which calls <em>nic_overrun()</em>. &nbsp;
+    We have to fix it in the <em>exact</em> way that National Semiconductor specifies in the
+    datasheets.&nbsp; The National Semiconductor datasheets say to wait at least 1.6ms before
+    kicking the card.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_tx(snic *nic);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="117"></td>
+    <td width="60%" height="117"><font size="2" face="Arial">This interrupt handler is called
+    when the transmitter on the card has finished putting the packet over the network. &nbsp;
+    It calls <em>cleanup_buffer()</em> on the finished one and then looks to see if any other
+    packets have been buffered and are ready to send.&nbsp; If so, it starts the transmitter
+    up again.&nbsp; In this way we can achieve higher bandwidth.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_tx_err(snic *nic);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="78"></td>
+    <td width="60%" height="78"><font size="2" face="Arial">If an error occurs while the NIC
+    is attempting to transmit a packet this interrupt is generated.&nbsp; We simply tally up
+    the error and if the packet was aborted, we attempt to send it again.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_rx(snic *nic);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="79"></td>
+    <td width="60%" height="79"><font size="2" face="Arial">When the NIC receives a packet off
+    the network it generates this interrupt and we package it up using <em>alloc_buffer_data()
+    </em>and hand it off to the upper layers by calling <em>nic-&gt;notify()</em>.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_counters(snic *nic);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="99"></td>
+    <td width="60%" height="99"><font size="2" face="Arial">When the card's counter tallies
+    overflow it generates this interrupt which clears the card's registers and updates the
+    drivers counters.&nbsp; This is also called when the user asks for current statistics with
+    <em>nic_get_stats().</em></font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_get_header(snic *nic, uint page, buffer_header *header);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="59"></td>
+    <td width="60%" height="59"><font size="2" face="Arial">The driver uses this function to
+    read the header from a chain of pages in the local buffer.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>int nic_send(snic *nic, uint buf);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="97"></td>
+    <td width="60%" height="97"><font size="2" face="Arial">This is used exclusively by the
+    core driver and will trigger the card's transmitter to start once the buffer has been sent
+    to the card using the DMA.&nbsp; It can return either <em><strong>NOERR</strong></em> or <em><strong>ERRTIMEOUT</strong></em>.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_block_input(snic *nic, unsigned char *buf, uint len, uint offset);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="59"></td>
+    <td width="60%" height="59"><font size="2" face="Arial">A general purpose procedure used
+    to read from the local memory using the card's DMA.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>void nic_block_output(snic *nic, packet_buffer *pkt);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="98"></td>
+    <td width="60%" height="98"><font size="2" face="Arial">This is comparable to <em>nic_block_input()</em>
+    except it writes instead of reading and can only be used at page boundaries. &nbsp;This is
+    responsible for padding packets that are too short</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="66"><hr>
+    <p><font size="4">External Procedures / Variables</font></td>
+  </tr>
+  <tr>
+    <td height="78"></td>
+    <td width="60%" height="78"><font size="2" face="Arial">These are procedures or variables
+    that must be provided by your OS or the encapsulating driver.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>extern void kprintf(int prio, char *, ...);</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="78"></td>
+    <td width="60%" height="78"><font size="2" face="Arial">The driver calls this in order to
+    display error or debugging information.&nbsp; You do not have to actually display this
+    information.&nbsp; Instead you could send it to a log file or just ignore it.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>extern void idle();</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="79"></td>
+    <td width="60%" height="79"><font size="2" face="Arial">Whenever the driver is spinning on
+    a semaphore it calls <em>idle()</em> so the OS can switch tasks and do something useful
+    during that time.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25"><pre><strong>extern unsigned long ticks;</strong></pre>
+    </td>
+  </tr>
+  <tr>
+    <td height="97"></td>
+    <td width="60%" height="97"><font size="2" face="Arial">A global variable that the driver
+    assumes is being incremented by the timer interrupt.&nbsp; This is used for timeouts and
+    no check is made for overflowing.&nbsp; The length of a tick in time is unspecified.
+    &nbsp; Work need to be done to fix this situation.</font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="66"><hr>
+    <p><font size="4">Conclusion</font></td>
+  </tr>
+  <tr>
+    <td height="116"></td>
+    <td width="60%" height="116"><font size="2" face="Arial">This has been an attempt to fully
+    document my NE2000 driver.&nbsp; Hopefully you should be able to port this to any
+    operating system with minimal difficulties.&nbsp; This code was originally written for my
+    own operating system, see <a href="http://www">http://www</a>. If you have any questions
+    or comments I can be reached at <a href="mailto:site@xnet.com">site@xnet.com</a> or <a
+    href="mailto:drarmstr@uiuc.edu">drarmstr@uiuc.edu</a>. Good luck! </font><p>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="22"></td>
+  </tr>
+  <tr>
+    <td height="24"></td>
+    <td width="60%" height="24"></td>
+  </tr>
+  <tr>
+    <td colspan="2" height="24"></td>
+  </tr>
+  <tr>
+    <td height="24"></td>
+    <td width="60%" height="24"><address>
+      © Copyright 1997, Douglas Armstrong.&nbsp; All rights reserved. 
+    </address>
+    <address>
+      There are no warranties stated or implied.&nbsp; I can not be held responsible if this
+      document or driver cause any damages. 
+    </address>
+    </td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- -= SIGOps =- Website++++
+   *  FileName          :     index.php
+   *  Last Modified By  :     vramesh2
+---- -->
+<html>
+<?php include 'head.php' ?>
+<body>
+<div align="center">
+   <table width="800" border="1"
+   cellpadding="0" cellspacing="0" class="main_tab">
+      <tr>
+         <td>
+            <?php include 'navigation.php' ?>
+          </td>
+        </tr>
+        <tr>
+          <td height="206" colspan="2"><img src="./images/main_pic.jpg"
+          alt="SIGOps" width="800" height="221" /></td>
+        </tr>
+        <tr>
+          <td height="300" colspan="2" align="center" valign="middle"><table width="98%" height="95%" border="0" cellpadding="0" cellspacing="3">
+              <tr>
+                <td height="19" colspan="2" align="left"><p class="heading">WELCOME<hr/></p></td>
+              </tr>
+              <tr>
+                <td width="24%" height="246" align="left" valign="top" class="side_cell"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="3">
+                    <tr>
+                      <td height="33%" valign="top"><table width="100%" border="0" cellspacing="3" cellpadding="0">
+                          <tr>
+                            <td align="left"><p class="side_heading">EVENTS<hr/></p></td>
+                          </tr>
+                          <tr>
+                            <td align="left"><p>Meetings : <br/>
+                              Sundays 6:00 PM in 1104 Siebel Center. </p>
+                              <p><a href="http://eoh.ec.uiuc.edu" target="_blank">Engineering Open House</a> : <br/>
+                                March 7 - 8 </p>
+                              </td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                    <tr>
+                      <td height="33%" valign="top"><table width="100%" border="0" cellspacing="3" cellpadding="0">
+                          <tr>
+                            <td align="left"><p class="side_heading">PROJECTS<hr/></p></td>
+                          </tr>
+                          <tr>
+                            <td height="33%" align="left" valign="top"><table width="100%" border="0" cellspacing="2" cellpadding="0">
+                              <tr>
+                                <td width="6%" valign="top"><p>&gt;&gt;</p></td>
+                                <td width="94%" valign="top"><p><a
+                                href="projects.php#dfe" target="_self">DFE -- Distributed Fish Environment</a></p>
+                                  </td>
+                              </tr>
+                              <tr>
+                                <td valign="top"><p>&gt;&gt;</p></td>
+                                <td valign="top"><p><a href="projects.php#rover" target="_self">SIGOps Rover</a></p></td>
+                              </tr>
+                              <tr>
+                                <td valign="top"><p>&gt;&gt;</p></td>
+                                <td valign="top"><p><a href="projects.php#alectos" target="_self">AlectOS</a></p></td>
+                              </tr>
+                            </table>                            </td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                    <tr>
+                      <td height="33%" valign="top"><table width="100%" border="0" cellspacing="3" cellpadding="0">
+                          <tr>
+                            <td align="left"><p class="side_heading">TALKS<hr/></p></td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="top"><table width="100%" border="0" cellspacing="2" cellpadding="0">
+                              <tr>
+                                <td width="6%" valign="top"><p>&gt;&gt;</p></td>
+                                <td width="94%" valign="top"><p><a
+                                href="talks.php#km_tut" target="_self">Linux Kernel Module Turotial </a></p></td>
+                              </tr>
+                              <tr>
+                                <td valign="top"><p>&gt;&gt;</p></td>
+                                <td valign="top"><p><a href="talks.php#roll_your_own" target="_self">How to Write Your Own Operating System</a></p></td>
+                              </tr>
+                            </table>
+                            </td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                </table></td>
+                <td width="76%" align="center" valign="top" class="main_cell"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="3">
+                  <tr>
+                    <td align="center" valign="top"><table width="95%" height="0" border="0" cellpadding="0" cellspacing="3">
+                      <tr>
+                        <td align="left" valign="top"><p class="small_heading">WELCOME<hr/></p></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="top"><p>Welcome to SIGOps.</p>
+                            <p>SIGOps is an <a href="http://acm.uiuc.edu" target="_blank">ACM</a> Special Interest Group for Operating Systems at the <a href="http://www.uiuc.edu" target="_blank">University Of Illinois Urbana - Champaign [UIUC]</a>. We take interest in anything to do with Operating Systems. New members are always welcome.</p>
+                          <p><br />
+                          </p></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="top"><p class="small_heading">NEWS<hr/></p></td>
+                      </tr>
+                      <tr>
+                        <td height="38" align="left" valign="top"><p>09.25.2007
+                            <br/>
+                            Redesigned the website to look pretty. Enjoy.</p></td>
+                      </tr>
+                    </table></td>
+                  </tr>
+                </table>
+                  </td>
+              </tr>
+          </table></td>
+        </tr>
+        <?php include 'footer.php' ?>
+      </table></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

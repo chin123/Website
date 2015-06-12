@@ -1,0 +1,169 @@
+<HTML>
+<HEAD>
+<title>Getting Started</title>
+</HEAD>
+
+<body>
+<H1><CENTER>Getting Started</center></h1>
+<h3><center>the first chapter in our series on <i>How to Write an 
+Operating System</i></center></h3>
+
+<hr>
+<h2>Your Mission</h2>
+
+<ul>
+<li>Create a basic C (or C++) program to print "Hello World!" anywhere
+on the screen.  
+<li>Write an output driver to handle displaying text, numbers, 
+addresses, and more, as well as scrolling the display.
+</ul>
+
+<p>
+Use the sample 
+<a href="ftp://ftp.acm.uiuc.edu/pub/sigops/Makefile.gcc">Makefile for C</a> or
+<a href="ftp://ftp.acm.uiuc.edu/pub/sigops/Makefile.g++">Makefile for C++</a>
+to compile it and the 
+<a href="ftp://ftp.acm.uiuc.edu/pub/sigops/boot.com">boot loader</a> to 
+run it.  You will need to know how to access the PC's 
+<a href="#vidmem">video card</a> to display text on the screen.  
+</p>
+
+<h2>Development Environment</h2>
+
+Ideally, you would have the following resources (maybe more):
+
+<ul>
+<li>a <b>fast machine</b> for compiling and/or debugging 
+<li>another <b>machine for testing</b> (at least one) - This can be 
+the same as your
+machine for compiling, but plan to spend a good deal of your time
+rebooting and switching between testing and compiling environments.  And
+when things go seriously awry (as they are wont to do in systems
+development), you won't be able to tell what went wrong because the
+state of the machine (including display and memory) is nuked.
+
+<li>an <b>In-Circuit Emulator (ICE)</b> - an invaluable tool for operating
+systems programming.  However, since these are very expensive (around
+$10,000 for an i386 version), they aren't available to everyone.  Too bad.
+<li>some kind of <b>connection</b> between the machines - a network or serial
+cable works best.  Using a floppy drive would be passable but painful, and it
+also suffers from the same debugging problems that you would have with only
+one machine, but at least you have a stable development environment.
+<li>a good <b>compiler</b> - We'll be using the GNU C compiler (gcc).
+<li><b>architecture references</b>- For some platforms, these are easy to come
+across; for others, they are impossible.  Not coincidentally, SigOPS will
+show you how to develop for the i386, about which exist a plethora of great
+books.
+</ul>
+
+<p>Our development environment consists of the ACM cluster and a random
+PC connected to the network.  
+<p> <a href="http://www.uiuc.edu/ph/www/swetland">Brian Swetland</a> has
+graciously installed gcc/g++ on the cluster, configured to cross-compile
+to the i386 in ELF format.  Currently, the cluster NFS exports its /scratch
+directory to a test PC (also in the ACM office); we may be able to export
+it to other machines on campus if we ask nice enough.  The test PC is
+running DOS and a DOS NFS client called XFS.  We don't have access to 
+an ICE, but we do have some good i386 architectural references in the 
+office; I'll point these out to you at the meetings.
+</p>
+
+<p>Setting up your own development environment is pretty painless as
+well.  Getting a PC for compilation and installing Linux and gcc/g++ on it
+is recommended (this is probably the easiest way), and you can 
+<a href="ftp://spam.acm.uiuc.edu/pub/sigops/xfs191.zip">Download XFS v1.91 for DOS</a>
+for the test machine.
+
+<h2>Boot Loader</h2>
+<p>What does a boot loader need to do?
+<ul>
+<li>Load enough of the operating system to get it running.
+<li>Prepare the environment for the operating system.
+<li>Start the operating system.
+</ul>
+
+<h2>What The Boot Loader Gives You</h2>
+
+The bootloader puts the machine into 32-bit protected mode and turns on
+paging.  For your pleasure, it:
+
+<ul>
+<li>loads all the files on the command line
+<li>gives you access to all of memory (up to 252MB worth)
+<li>creates a boot stack (for function calls and local variables)
+<li>creates a boot page table, with identity mapped memory (so it looks like 
+you're in physical memory mode), EXCEPT for page 0 (this is used to catch 
+null references).
+</ul>
+
+<h2>What You Need to Give the Boot Loader</h2>
+
+<p>
+You will need to supply a _start function (declared C style; if you're
+using the C++ version you need to declare it 'extern "C"') in the first 
+file (which should be an i386-ELF32 executable), declared as follows:
+
+<pre><code>
+struct file {
+   char *ptr;           /* address of the loaded file */
+   unsigned int len;    /* length of the file in bytes */
+};
+
+void _start(int memSize,  /* total amount of memory installed in bytes */
+            char *parms,  /* ASCIIZ string typed at the boot prompt */
+            struct file *loadedfiles);
+
+</code></pre>
+
+The last parameter, <code>loadedfiles</code>, is an array of <code>struct file</code>.
+This represents all the files that were loaded by the bootloader, including 
+the one it passes control to.  The last item in the array will be NULL 
+<code>(loadedfiles[lastitem].ptr == NULL)</code>.
+</p>
+
+<p>You need to compile your kernel into either an i386-ELF or a.out 
+executable format.  The raw kernel file will always be loaded at 
+0x100000 (1MB), so the text and data segment locations in the file
+need to coincide with their locations in memory.  For ELF, specifying 
+the options '-dN -Ttext 0x100080' to ld will assign space to common
+symbols in the file, merge the text and data segments, and start
+the text segment immediately after the header (which is where it
+is in the file anyway).  For a.out, '-dN -Ttext 0x100020' works
+as well, for the same reasons.  Note that the linker does not have
+to create the output binary in this way;  however, for reasons
+of simplicity, the boot loader does not actually interpret the 
+kernel binary.
+</p>
+
+<a name="vidmem"><h2>Video Memory Structure</h2></a>
+
+<p>The text mode video screen in the PC is memory-mapped to physical address 
+<b>0xb0000</b> on monochrome adapters and <b>0xb8000</b> on color adapters.
+(Our PCs all have color adapters, and most likely any machine you find will
+too.  I merely include the monochrome adapter information for completeness).
+</p>
+
+<p>
+You can access a specific physical address in the PC by merely assigning
+it to a pointer, and then treating the pointer as a reference to an
+array.  Assigning a numeric value to a pointer is just a matter of using
+a cast:
+
+<pre><code>char *vidmem = (char *) 0xb8000;</code></pre>
+
+The text mode is 80 columns by 25 rows, with 2 bytes per character
+that appears on the screen.  The first byte is the ASCII value of 
+the character itself, and the second is the attribute byte.  0x07 is 
+white on black, and works fine.  You may want to experiment with 
+other colors.
+</p>
+
+<h2>For the Curious Only</h2>
+
+Look at some <a href="1.a.html">Technical Information about the boot loader</a>.
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

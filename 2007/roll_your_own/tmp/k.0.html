@@ -1,0 +1,130 @@
+<HTML>
+<HEAD>
+<title>Kernel Basics</title>
+</HEAD>
+
+<body>
+<H1><CENTER>Kernel Basics</center></h1>
+<h3><center>the second chapter in our series on <i>How to Write an 
+Operating System</i></center></h3>
+
+<hr>
+
+<h2>Your Mission</h2>
+
+<ul>
+<li>Plan out a basic design for your kernel, including what you want it to 
+handle and what interface it should have for applications.  
+
+<li>Write a polling <a href="kbinfo.html">keyboard</a> driver (using
+Linux's <a href="ftp://ftp.acm.uiuc.edu/pub/sigops/io.h">I/O header file</a>) 
+and a routine to display keyboard scan codes for keys pressed.
+
+<li>Check to make sure that your video and keyboard drivers are consistent
+with your operating system design.
+</ul>
+
+<h2>Kernel structure</h2>
+
+A minimal kernel usually handles the following things:
+
+<ul>
+<li><a href="http://pandonia.canberra.edu.au/OS/l7_1.html">Memory management</a>
+<li>Task switching
+<li>Interprocess communication
+<li>Input/Output (Devices, Interrupts, DMA)
+</ul>
+
+Things to think about when designing your operating system:
+
+<ul>
+<li>The <a href="http://www.maekawa.is.uec.ac.jp/research/os/misc/">comp.os.research FAQ</a>
+<li><a href="/white_papers/incoming/uky/vade.mecum.2.ps.gz">An Operating Systems Vade Mecum</a>
+<li>Kernel model 
+<ul>
+<li>Microkernel
+<li>Macrokernel
+<li>Exo-kernel
+</ul>
+<li>Memory model 
+<ul>
+<li>Single-address space
+<li>Protection
+<li>Virtual memory
+</ul>
+<li>Process model (processes, threads)
+<ul>
+<li>Processes vs. Threads
+<li>Scheduling algorithms
+<li>Real-time
+<li>Synchronization (IPC) mechanisms
+</ul>
+<li>Device model (streams)
+<ul>
+<li>streams
+<li>Privileged and Protected
+</ul>
+<li>Application/Kernel interface(s) (system calls)
+<ul>
+<li>System calls
+<li>shared libraries
+<li>object-oriented
+</ul>
+<li>Interprocess communication mechanisms
+<li>Protection and Security
+<ul>
+<li>Filesystem support
+<li>Multi-user vs. single-user
+<li>Passwords and Encryption 
+</ul>
+<li>Networking
+<ul>
+<li>Distributed systems
+</ul>
+</ul>
+
+<h2>Memory Allocation</h2>
+
+<ul>
+<li><a href="http://www.cs.colorado.edu/~zorn/Malloc.html">Ben Zorn's page</a> of malloc()/free() implementations
+</ul>
+
+<h2>Input/Output</h2>
+
+<p>The i386 has a seperate I/O address space in addition to main
+physical memory.  Instead of using instructions that access memory,
+however, the I/O address space requires that you use the <b>IN</b>
+and <b>OUT</b> instructions to read and write it.  
+</p>
+
+<p>Using these instructions in assembly is simply a matter of knowing
+the syntax and register usage.  However, communicating these to gcc 
+is definitely not a trivial task.  Linux has a pretty decent set of 
+macros for inputting a byte from a port (a port is an I/O address) and
+outputting a byte to a port.  gcc doesn't do type-checking on macros,
+but their definitions look like this:
+
+<pre><code>
+void outb_p(unsigned char val, unsigned int port);  /* pausing version */
+void outb(unsigned char val, unsigned int port);
+unsigned char inb_p(unsigned int port);             /* pausing version */
+unsigned char inb(unsigned int port);
+</code></pre>
+
+There are two versions of each routine, one that runs full speed, and
+one that pauses slightly after each access.  Normally, you don't need
+to use the pausing versions, but there are certain chips and devices
+that require it (like the PIC).  I'll point these out as they come up.
+</p>
+
+<p>Remember that 
+<a href="ftp://ftp.acm.uiuc.edu/pub/sigops/io.h">the header file</a>
+that creates these macros is Linus Torvald's work, and should be 
+recognized as such.
+</p>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

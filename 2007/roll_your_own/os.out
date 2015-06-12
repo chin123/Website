@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title></title>
+  </head>
+
+  <body>
+    I. Getting started II. basics of an os kernel III. debugging help IV.
+    system calls V. context-switching VI. Hardware Interrupts VII. Virtual
+    memory VIII. Protection IX. More driver stuff X. SMP (multiprocessor
+    architecture and caveats) XI. Algorithms and Data Structures XII.
+    Filesystems XIII. Security I. Getting started development environment
+    boot-loader, i386 protected mode stack Task: set up the development
+    environment, write and run hello world II. basics of an os kernel -
+    bootstrapping - drivers, mem, task-switching, ipc -
+    micro/macro/exo-kernel Task: basic kernel design/OS structure Task:
+    output driver (complex printing) III. debugging help Assert macro
+    exception handling (IDT) serial gdb support debug registers Task: protect
+    the "kernel" from itself, make it crash-proof IV. system calls
+    mechanisms, use of function table in GDT software interrupt multiplexor
+    Task: write a program for the os to "load" and run (single-tasked os) V.
+    context-switching i386 support (Task state segment, GDT TSS entries, TR)
+    Task: start two tasks and cooperatively multitask VI. Protection i386
+    ring scheme supervisor/user, read/write stack switching Task: change
+    kernel to put program(s) in user mode VII. Virtual memory getting started
+    (paged protected mode) page fault exception handling protection/access
+    bits Task: move the kernel to paged protected mode, get everything
+    working VIII. IPC and synchronization Atomic operations (BTS, XCHG,
+    CMPXCHG) semaphores (mutexes) message-passing shared memory streams
+    signals (null messages) Task: start two dependent tasks and effectively
+    multitask IX. Hardware Interrupts programming the PIC Timer interrupt,
+    programming the PIT restoring the state of the computer Task: preemptive
+    multitasking X. Driver stuff generic I/O: I/O address space, memory
+    mapped I/O, DMA (vm problems) DOS interface Text video, serial (16550
+    UART) KB, mass storage (floppy/hard disk), mouse/joystick, parallel,
+    network driver, speaker Task: write a modular driver interface and a
+    driver XI. Algorithms and Data Structures scheduling queue heap
+    allocation free page list queue theory (bring in an experienced speaker)
+    scheduling algorithms paging algorithms XII. Filesystems XIII. Security
+    XIV. Real-timeness
+  </body>
+</html>
+

@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title>Compiling the Kernel</title>
+  </head>
+
+  <body>
+    <center>
+      <h1>Compiling the Kernel</h1>
+    </center>
+
+    <center>
+      <h3>the first part of the first chapter in our series on <i>How to
+      Write an Operating System</i></h3>
+    </center>
+    <hr>
+
+    <h2>Development Environment</h2>
+    Minimally, you need the following: 
+
+    <ul>
+      <li>a <b>development machine</b> with compilation, debugging, and
+      support tools installed for the target system.</li>
+
+      <li>a <b>test machine</b> of the same type as your target system. This
+      machine houses the boot loader and some mechanism for getting the
+      operating system from the development machine.</li>
+
+      <li>some kind of <b>connection</b> between the machines - a network or
+      serial cable works best. Using a floppy drive would be passable but
+      painful.</li>
+    </ul>
+
+    <p>Your development and target systems could be the same machine, but
+    until your operating system can host the development environment by
+    itself, you will waste a good deal of time switching between testing and
+    development environments (which oftentimes involves a reboot).</p>
+
+    <p>Check out the ACM@UIUC operating system <a href="acm.html">development
+    environment</a>.</p>
+
+    <h2>The Entry Point</h2>
+
+    <p>In applications programming, the main() function is usually described
+    as the first function to receive control. However, the real entry is a
+    function called _start(), and is typically defined by crt1.o. This
+    _start() sets up the environment, opens the default descriptors, and then
+    calls the application's main() function. But for an operating system,
+    there isn't any crt1.o (at least, not yet), and so you will need to
+    supply your own _start function as the entry point, instead of
+    main().</p>
+
+    <p>In the the first loaded file (which should be a statically linked
+    executable), our boot loader expects a declaration of _start as
+    follows:</p>
+<pre>
+<code>void _start(int memSize,  /* total amount of memory installed in bytes */
+            char *parms,  /* ASCIIZ string typed at the boot prompt */
+            struct boot_dir *loadedfiles);
+
+</code>
+</pre>
+    The last parameter, <code>loadedfiles</code>, is struct of type
+    <code>boot_dir</code> which is a structure that contains an array of
+    "file" objects that contain pointers to the individual files. A
+    description of the <a href="../rsrc/boot.html">bootloader system</a> is a
+    must look at to get the os properly booted. <br>
+     <br>
+     
+
+    <p>You need to compile your kernel into either an ELF executable format.
+    The raw kernel file will always be loaded at 0x100000 (1MB), so the text
+    and data segment locations in the file need to coincide with their
+    locations in memory. For ELF, specifying the options '-dN -Ttext
+    0x100080' to ld will assign space to common symbols in the file, merge
+    the text and data segments, and start the text segment immediately after
+    the header (which is where it is in the file anyway). For the new uBoot
+    system, the entry point needs to be at 0x101080 because the first 4K is
+    taken by the boot directory entry Note that the linker does not have to
+    create the output binary in this way; however, for reasons of simplicity,
+    the boot loader does not actually interpret the kernel binary.</p>
+
+    <h2>Exiting the Kernel</h2>
+
+    <p>The easiest way to return to DOS is simply to leave the _start()
+    function. However, this may not be possible in an exception handler
+    before you have context switching. So, an alternative method (and also a
+    very messy one) is to save the frame pointer (%ebp) in the _start()
+    function to a global variable, and then restore that value <b>plus 4</b>
+    to the stack register (%esp), immediately followed by a return. This
+    looks like this:</p>
+
+    <ul>
+      <li>
+        To save %ebp (must be in the _start function): 
+<pre>
+<code>asm ("mov %%ebp, %0":"=m" (oldEBP));</code>
+</pre>
+      </li>
+
+      <li>
+        To return to the bootloader: 
+<pre>
+<code>asm ("mov %0, %%esp; ret": :"r" (oldEBP + 4));</code>
+</pre>
+      </li>
+    </ul>
+    where oldEBP is declared as a global unsigned integer. <br>
+     <br>
+     
+
+    <h2>Compiling the Kernel</h2>
+
+    <p>The <a href="code/Makefile">Makefile</a> that we've provided will
+    compile and link the kernel.</p>
+    <hr>
+    <!--#include virtual="/include/footer.html" -->
+  </body>
+</html>
+

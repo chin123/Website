@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <title>sigops - AlectOS</title>
+    <link rel=STYLESHEET href="alectos.css" TYPE="text/css" />
+  </head>
+  <body>
+    <h2>Sigops Coding Style</h2>
+    <hr />
+    <p>
+    This is a list of sigops coding style guidelines that should be used
+    wherever possible on AlectOS.
+    </p>
+
+    Guidelines:
+    <ul>
+      <li>
+      Spaces should be used instead of actual tab characters ('\t').  In vim,
+      you can use ':set expandtab' to do this automatically.
+      </li>
+
+      <li>
+      Three spaces should be used for tabs.  This corresponds to ':set
+      shiftwidth=3' and ':set tabstop=3' in vim.
+      </li>
+
+      <li>
+      We are using "pseudo-bastard style" for indenting.  This was chosen after
+      a big argument as a reasonable compromise.  To show you what I mean by
+      "pseudo-bastard style" look below:
+      <pre>
+        if (someval == someconst)
+        {
+           /* level 1 of indenting */
+
+           if (retval)
+           {
+              /* nested indent */
+           }
+        }
+      </pre>
+      Basically, don't put the open brace on the same line that starts a block.
+      And no matter what you do, DO NOT use GNU style brain-dead indenting.
+      Anybody caught indenting in this manner will be shot and hung.
+      </li>
+
+      <li>
+      Comments are fairly free form, but there are a couple of things that will
+      make the code much more readable.
+      <ul>
+        <li>
+        Put a space between the opening and ending of a comment and any text
+        in the comment.  ie:
+        <pre>
+          // correct
+          /* correct */
+
+          //not good
+          /*not good*/
+        </pre>
+        </li>
+
+        <li>
+        Multi-line comments should be done with c-style comments, NOT c++ style
+        comments.
+        <pre>
+          /* c-style */
+
+          // c++ style
+        </pre>
+        </li>
+      </ul>
+      </li>
+
+      <li>
+      Functions and variables should be named using underscores to separate
+      distinct sections of the name, rather than camel humps.  ie:
+      <pre>
+        uint8 acceptable_var_name;
+
+        uint8 unaccessableVarName;
+      </pre>
+      </li>
+
+      <li>
+      Text should be wrapped at 100 characters (although 80 characters is also
+      acceptable wrap width).  This can be accomplished with
+      ':set textwidth=100' in vim.
+      </li>
+    </ul>
+
+  </body>
+</html>

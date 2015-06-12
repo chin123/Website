@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Dependancies</title>
+  </head>
+
+  <body>
+    <h1>Dependancies</h1>
+
+Here is an easy way to do dependancies automatically.
+
+stick this somewhere in you Makefile:
+
+<PRE>
+depend: .depend
+
+.depend: $(SLWTSRCS)
+        $(CC) -E $(CFLAGS) -M *.c *.cc> .depend
+</PRE>
+
+and at the very end put:
+
+<PRE>
+#
+# include a dependency file if one exists
+#
+ifeq (.depend,$(wildcard .depend))
+include .depend
+endif
+</PRE>
+
+not a 'make depend' will calculate dependancies.
+
+    <hr>
+    <address><a href="mailto:gilling@sleepless.acm.uiuc.edu">erik gilling</a></address>
+<!-- Created: Fri Oct 17 00:00:29 CDT 1997 -->
+<!-- hhmts start -->
+Last modified: Fri Oct 17 00:02:12 CDT 1997
+<!-- hhmts end -->
+  </body>
+</html>

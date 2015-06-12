@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title>Standard Library</title>
+  </head>
+
+  <body>
+    <center>
+      <h1>Standard Library</h1>
+    </center>
+
+    <center>
+      <h3>the third part of the third chapter in our series on <i>How to
+      Write an Operating System</i></h3>
+    </center>
+    <hr>
+
+    <h2>Creating a library</h2>
+
+    <p>The standard library provides a level of abstraction to system calls
+    and functionality that all operating systems should provide (according to
+    the ANSI standard). For portability and consistency, an operating system
+    should provide access to functions in the <a href=
+    "http://www.infosys.utas.edu.au/info/documentation/C/CStdLib.html">C
+    standard library</a>, at least at some level. This is usually done
+    through either <b>static</b> or <b>shared libraries</b>, which can be
+    created with the <code>ar</code> command:</p>
+<pre>
+<code>ar vq libc.a strlen.o strcpy.o</code>
+</pre>
+    for example. 
+
+    <p>Then, when linking applications for use by your kernel, specify that
+    it should statically link (for now, until your operating system can
+    handle shared libraries) the application with your standard library:</p>
+<pre>
+<code>ld -o app.elf app.o -lc</code>
+</pre>
+    <hr>
+    <!--#include virtual="/include/footer.html" -->
+  </body>
+</html>
+

@@ -1,0 +1,72 @@
+<HTML>
+<HEAD>
+<title>PCI</title>
+</HEAD>
+
+<body>
+<H1><CENTER>PCI</center></h1>
+<h3><center>the first part of the seventh chapter in our series 
+on <i>How to Write an Operating System</i></center></h3>
+
+<hr>
+
+<h2>PCI</h2>
+
+<H3>Overview</H3>
+<p>A friend once said that "hardware engineers live to make software engineers
+lives hell."  PCI is on of the exceptions that actually works in a usefull
+manner.  In most architecture the PCI bridge handles most everything such
+as Memory Mapped IO, DMA, and I/O ports it you are on a PC.  All that you
+don't have to worry too much about except for configuring it.</p>
+
+<p>PCI, also, provides an intellegent configuration mechanism.  Each device
+has either 64 or 256 bytes of configuration space.  The 64 bytes are a 
+<A HREF="7.c.0.html">standard header format</A>.  The last 192 bytes are 
+left for device specific configureation.  By the time your OS boot the
+BIOS/Firmware will have set most of the important information such as IRQ and 
+IO address.  Your OS need only read these values and start using them.  
+Thats right no jumpers.  No probing.  Does it get any better than this?</p>
+
+<H3>Addresses in PCI</H3>
+<p>PCI has a special way of representing addresses when dealing with the
+config space.  Values not only include location but address type 
+(memory/io) and various other flags.  The two formats are as follows:</P>
+
+<B>Memory Address</B>
+<TABLE BORDER=1>
+<TR><TD WIDTH="30%" ALIGN="LEFT">31</TD><TD WIDTH="30%" ALIGN="RIGHT">4</TD>
+<TD WIDTH="10%">3</TD><TD WIDTH="10%">2</TD><TD WIDTH="10%">1</TD>
+<TD WIDTH="10%">0</TD></TR>
+<TR><TD COLSPAN=2>Base address</TD><TD>P</TD>
+<TD COLSPAN=2>Type</TD><TD>0</TD></TR>
+</TABLE>
+<TABLE>
+<TR><TD>P</TD><TD>Prefetchable</TD></TR>
+<TR><TD VALIGN="TOP">Type</TD><TD><TABLE>
+	    <TR><TD>00</TD><TD>Located anywhere in 32-bit address space</TD></TR>
+	    <TR><TD>01</TD><TD>Located below 1 MB</TD></TR>
+	    <TR><TD>10</TD><TD>Located anywhere in 64-bit address space</TD></TR>
+	    <TR><TD>11</TD><TD>Reserved</TD></TR>
+	    </TABLE></TD></TR>
+</TABLE>
+
+<B>IO Address</B>
+<TABLE BORDER=1>
+<TR><TD WIDTH="40%" ALIGN="LEFT">31</TD><TD WIDTH="40%" ALIGN="RIGHT">2</TD>
+<TD WIDTH="10%">1</TD><TD WIDTH="10%">0</TD></TR>
+<TR><TD COLSPAN=2>Base address</TD><TD>R</TD><TD>1</TD></TR>
+</TABLE>
+<TABLE>
+<TR><TD>R</TD><TD>Reserved</TD></TR>
+</TABLE>
+<h2>Processor Implementations</h2>
+
+<ul>
+<li><a href="i386/pci.html">i386</a>
+</ul>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

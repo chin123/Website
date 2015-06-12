@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<title>Basics of Programming the Keyboard</title>
+</HEAD>
+
+<body>
+<H1><CENTER>Programming the Keyboard</center></h1>
+<h3><center>the second part of the second chapter in our series on 
+<i>How to Write an Operating System</i></center></h3>
+
+<hr>
+
+Note: For more information, refer to <i>The Indispensable PC Hardware Book</i>, 
+pp. 932 to 943.
+
+<hr>
+
+<h2>The Keyboard</h2>
+
+(Note:  The following information pertains directly to MF II (101-key) 
+keyboards.  Its accuracy for other keyboards is imperfect.)
+
+<p>The PC keyboard is actually interrupt driven, so you won't create a
+full keyboard driver until the section on Hardware Interrupts.  
+However, you can start with a simple polling driver that waits for
+a key to be pressed and returns the scan code.
+</p>
+
+<p>The keyboard works through the I/O ports 0x60 and 0x64:
+<br><br>
+Keyboard controller registers:
+<table border cols=3>
+<tr><th>Port<th>Register<th>Read/Write</tr>
+<tr><td>60h<td>output buffer<td>R</tr>
+<tr><td>60h<td>input buffer<td>W</tr>
+<tr><td>64h<td>control register<td>W</tr>
+<tr><td>64h<td>status register<td>R</tr>
+</table>
+<br>
+Status Register (I/O reads from port 64h):
+<br>
+<img src="kbstatus.jpg">
+<table border>
+<tr><td>PARE: parity error of the last byte (PS/2 only)
+<li>0 = last byte without parity error
+<li>1 = last byte with parity error 
+</tr>
+<td>TIM:  general time-out
+<li>0 = no time-out error
+<li>1 = error 
+</td>
+<tr><td>AUXB: output buffer for auxiliary device
+<li>0 = holds keyboard data
+<li>1 = holds auxiliary data
+</tr>
+<td>KEYL: keyboard lock status
+<li>0 = keyboard locked
+<li>1 = keyboard free
+</td>
+<tr><td>C/D: command/data
+<li>0 = data byte written
+<li>1 = command byte written
+</tr>
+<td>SYSF: system flag
+<li>0 = power-on reset
+<li>1 = self-test successful
+</td>
+<tr><td>INPB: input buffer status
+<li>0 = input buffer empty
+<li>1 = CPU data in input buffer
+</tr>
+<td>OUTB: output buffer state
+<li>0 = output buffer empty
+<li>1 = keyboard controller data in output buffer
+</td>
+</table>
+
+<p>So basically, you could write a simple polling keyboard driver by sampling
+the status register (port 64h) and checking OUTB (bit 0).  Whenever OUTB is
+1 (data in output buffer), you can read the output buffer (port 60h) and
+get the scan code.
+</p>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

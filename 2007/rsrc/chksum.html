@@ -1,0 +1,12 @@
+<pre><code>
+int ipchksum(unsigned short *ip, int len) {
+    unsigned long sum = 0;
+    len >>= 1;          
+    while (len--) {             
+        sum += *(ip++);         
+        if (sum > 0xFFFF)
+            sum -= 0xFFFF;
+    }                   
+    return((~sum) & 0x0000FFFF);
+}
+</code>

@@ -1,0 +1,27 @@
+Assorted various notes that we would tell you if we were in the office,
+but we may not be there right now.
+
+First off, the netscape button does not work.  Instead type "netscape &" at
+the command prompt (xterm).
+
+Second, if you can't find bootmaker or netboot, they are in the
+/develop/xdev/bin/  for AIX and 
+/extra/sigops/bin   on Sun
+
+Third, machines you probably want to use.  All of the AIX machines work with
+the provided Makefile, the Sun wilbur.acm.uiuc.edu requires changes to the
+Makefile.  Omgea is the Alpha in the office and does not have the proper
+compilers right now:(  I would suggest using sleepless.acm.uiuc.edu, in the 
+back room, becasue it is the fastest AIX machine.
+
+Lastly, to actually netboot a kernel image, after running it through bootmaker,
+the test computers have the wrong ip addresses currently because we just
+changed networks that ACM lives on.  So to change the ip, first hit the esc
+key to break to the prompt and type ip=<some valid ip>
+at the prompt and then type go and the machine will flash real cool like.
+Where the last sentance says <some valid ip> type the ip that is on a little
+ripped yellow sheet of paper above or near the test machines:)  Then just
+use netboot to boot it up.
+
+That is all
+Dave

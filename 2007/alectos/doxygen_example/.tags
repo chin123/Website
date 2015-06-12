@@ -1,0 +1,3 @@
+Mstack_example	/home/jacarrin/doxygen_example/examples/stack_example.c	/^void main()$/
+pop	/home/jacarrin/doxygen_example/stack.c	/^int pop(stack s, int val)$/
+push	/home/jacarrin/doxygen_example/stack.c	/^int push(stack s, int val)$/

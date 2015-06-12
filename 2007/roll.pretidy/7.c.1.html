@@ -1,0 +1,184 @@
+<HTML>
+<HEAD>
+<title>Class Code Table</title>
+</HEAD>
+
+<body>
+<H1><CENTER>Class Code Table</center></h1>
+<hr>
+
+<H2>Class Codes</H2>
+<TABLE BORDER="1">
+<TR><TH>Class</TH><TH>Description</TD></TR>
+<TR><TD>0x00</TD><TD>Devices built before class codes (i.e. pre PCI 2.0)</TD></TR>
+<TR><TD>0x01</TD><TD>Mass storage controller</TD></TR>
+<TR><TD>0x02</TD><TD>Network controller</TD></TR>
+<TR><TD>0x03</TD><TD>Display controller</TD></TR>
+<TR><TD>0x04</TD><TD>Multimedia device</TD></TR>
+<TR><TD>0x05</TD><TD>Memory Controller</TD></TR>
+<TR><TD>0x06</TD><TD>Bridge Device</TD></TR>
+<TR><TD>0x07</TD><TD>Simple communications controllers</TD></TR>
+<TR><TD>0x08</TD><TD>Base system peripherals</TD></TR>
+<TR><TD>0x09</TD><TD>Inupt devices</TD></TR>
+<TR><TD>0x0A</TD><TD>Docking Stations</TD></TR>
+<TR><TD>0x0B</TD><TD>Processorts</TD></TR>
+<TR><TD>0x0C</TD><TD>Serial bus controllers</TD></TR>
+<TR><TD>0x0D-0xFE</TD><TD>Reserved</TD></TR>
+<TR><TD>0xFF</TD><TD>Misc</TD></TR>
+</TABLE>
+
+
+<H2>Class Code 0: Pre 2.0</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>All devices other than VGA</TD></TR>
+<TR><TD>0x01</TD><TD>0x01</TD><TD>VGA device</TD></TR>
+</TABLE>
+
+<H2>Class Code 1: Mass Storage Controllers</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>SCSI Controller</TD></TR>
+<TR><TD>0x01</TD><TD>0xXX</TD><TD>IDE controller.  The <B>Prog I/F</B> is defined as follows:<BR>
+		<TABLE>
+		<TR><TH>bits</TH><TH>Desc</TH></TR>
+		<TR><TD>0</TD><TD>Operating mode (primary)</TD></TR>
+		<TR><TD>1</TD><TD>Programmable indicator (primary)</TD></TR>
+		<TR><TD>2</TD><TD>Operating mode (secondary)</TD></TR>
+		<TR><TD>3</TD><TD>Programmable indicator (secondary)</TD></TR>
+		<TR><TD>6..4</TD><TD>Reserved (zero)</TD></TR>
+		<TR><TD>7</TD><TD>Master IDE device</TD></TR>
+		</TABLE>
+		</TD></TR>
+<TR><TD>0x02</TD><TD>0x00</TD><TD>Floppy disk controller</TD></TR>
+<TR><TD>0x03</TD><TD>0x00</TD><TD>IPI controller</TD></TR>
+<TR><TD>0x04</TD><TD>0x00</TD><TD>RAID controller</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other mass storage controller</TD></TR>
+</TABLE>
+
+<H2>Class Code 2: Network Controllers</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>Ethernet controller</TD></TR>
+<TR><TD>0x01</TD><TD>0x00</TD><TD>Token ring</TD></TR>
+<TR><TD>0x02</TD><TD>0x00</TD><TD>FDDI controller</TD></TR>
+<TR><TD>0x03</TD><TD>0x00</TD><TD>ATM controller</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other network conteroller</TD></TR>
+</TABLE>
+
+<H2>Class Code 3: Display Controllers</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD ROWSPAN=2>0x00</TD><TD>0x00</TD><TD>VGA compatable controller.  Has
+										mapping for 0xA0000..0xBFFFF and io
+										addresses 0x3B0..0x3BB.</TD></TR>
+					   <TR><TD>0x01</TD><TD>8514 compatable</TD></TR>
+<TR><TD>0x01</TD><TD>0x00</TD><TD>XGA controller</TD></TR>
+<TR><TD>0x80</TD><TD>0x80</TD><TD>Other display controller</TD></TR>
+</TABLE>
+
+<H2>Class Code 4: Multimedia Devices</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>Video device</TD></TR>
+<TR><TD>0x01</TD><TD>0x00</TD><TD>Audio device</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other multimedia device</TD></TR>
+</TABLE>
+
+<H2>Class Code 5: Memory Controllers</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>RAM controller</TD></TR>
+<TR><TD>0x01</TD><TD>0x00</TD><TD>Flash memory controller</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other memory controller</TD></TR>
+</TABLE>
+
+<H2>Class Code 6: Bridge Devices</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>Host/PCI bridge</TD></TR>
+<TR><TD>0x01</TD><TD>0x00</TD><TD>PCI/ISA bridge</TD></TR>
+<TR><TD>0x02</TD><TD>0x00</TD><TD>PCI/EISA bridge</TD></TR>
+<TR><TD>0x03</TD><TD>0x00</TD><TD>PCI/Micro Channel bridge</TD></TR>
+<TR><TD>0x04</TD><TD>0x00</TD><TD>PCI/PCI bridge</TD></TR>
+<TR><TD>0x05</TD><TD>0x00</TD><TD>PCI/PCMCIA bridge</TD></TR>
+<TR><TD>0x06</TD><TD>0x00</TD><TD>PCI/NuBus bridge</TD></TR>
+<TR><TD>0x07</TD><TD>0x00</TD><TD>PCI/CardBus bridge</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other bridge type</TD></TR>
+</TABLE>
+
+<H2>Class Code 7: Simple Communications Controllers</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD ROWSPAN=3>0x00</TD><TD>0x00</TD><TD>Generic XT compatable serial
+controller</TD></TR>
+<TR><TD>0x01</TD><TD>16450 compatable serial controller</TD></TR>
+<TR><TD>0x02</TD><TD>16550 compatable serial controller</TD></TR>
+<TR><TD ROWSPAN=3>0x01</TD><TD>0x00</TD><TD>Parallel port</TD></TR>
+<TR><TD>0x01</TD><TD>Bi-directional parallel port</TD></TR>
+<TR><TD>0x02</TD><TD>ECP 1.X parallel port</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other commonications device</TD></TR>
+</TABLE>
+
+
+<H2>Class Code 8: Base System Peripherals</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD ROWSPAN=3>0x00</TD><TD>0x00</TD><TD>Generic 8259 programmable 
+	interrupt controller (PIC)</TD></TR>
+<TR><TD>0x01</TD><TD>ISA PIC</TD></TR>
+<TR><TD>0x02</TD><TD>EISA PIC</TD></TR>
+<TR><TD ROWSPAN=3>0x01</TD><TD>0x00</TD><TD>Generic 8237 DMA 
+	  controller</TD></TR>
+<TR><TD>0x01</TD><TD>ISA DMA controller</TD></TR>
+<TR><TD>0x02</TD><TD>EISA DMA controller</TD></TR>
+<TR><TD ROWSPAN=3>0x02</TD><TD>0x00</TD><TD>Generic 8254 timer</TD></TR>
+<TR><TD>0x01</TD><TD>ISA system timer</TD></TR>
+<TR><TD>0x02</TD><TD>EISA system timer</TD></TR>
+<TR><TD ROWSPAN=2>0x03</TD><TD>0x00</TD><TD>Generic RTC controller</TD></TR>
+<TR><TD>0x01</TD><TD>ISA RTC controller</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other system peripheral</TD></TR>
+</TABLE>
+
+<H2>Class Code 9: Input Devices</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>Keyboard controller</TD></TR>
+<TR><TD>0x01</TD><TD>0x00</TD><TD>Digitizer (pen)</TD></TR>
+<TR><TD>0x02</TD><TD>0x00</TD><TD>Mouse controller</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other input controller</TD></TR>
+</TABLE>
+
+<H2>Class Code A: Docking Stations</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>Generic docking station</TD></TR>
+<TR><TD>0x80</TD><TD>0x00</TD><TD>Other type of docking station</TD></TR>
+</TABLE>
+
+<H2>Class Code B: Processors</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>386</TD></TR>
+<TR><TD>0x01</TD><TD>0x00</TD><TD>486</TD></TR>
+<TR><TD>0x02</TD><TD>0x00</TD><TD>Pentium</TD></TR>
+<TR><TD>0x10</TD><TD>0x00</TD><TD>Alpha</TD></TR>
+<TR><TD>0x20</TD><TD>0x00</TD><TD>PowerPC</TD></TR>
+<TR><TD>0x40</TD><TD>0x00</TD><TD>Co-Processor</TD></TR>
+</TABLE>
+
+<H2>Class Code C: Serial Bus Controllers</H2>
+<TABLE BORDER="1">
+<TR><TH>Sub-Class</TH><TH>Prog. I/F</TH><TH>Description</TH></TR>
+<TR><TD>0x00</TD><TD>0x00</TD><TD>Firewire (IEEE 1394)</TD></TR>
+<TR><TD>0x01</TD><TD>0x00</TD><TD>ACCESS bus</TD></TR>
+<TR><TD>0x02</TD><TD>0x00</TD><TD>SSA (Serial Storage Architecture)</TD></TR>
+<TR><TD>0x03</TD><TD>0x00</TD><TD>USB (Universal Serial Bus)</TD></TR>
+</TABLE>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+
+

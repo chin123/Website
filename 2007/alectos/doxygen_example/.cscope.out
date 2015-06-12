@@ -1,0 +1,291 @@
+cscope 15 $HOME/doxygen_example               0000001226
+	@/home/jacarrin/doxygen_example/documentation.h
+
+	@/home/jacarrin/doxygen_example/examples/stack_example.c
+
+1 
+	$maš
+()
+
+3 
+¡ack
+ 
+s
+;
+
+4 
+y
+;
+
+5 
+	`push
+(
+s
+, 3);
+
+6 
+y
+ = 
+	`pÝ
+(
+s
+);
+
+7 
+	}
+}
+
+	@/home/jacarrin/doxygen_example/stack.c
+
+7 
+	~"¡ack.h
+"
+
+13 
+	$push
+(
+¡ack
+ 
+s
+, 
+v®
+)
+
+15 
+s
+.
+’d
+++;
+
+16 
+s
+.
+¡ack
+[s.
+’d
+] = 
+v®
+;
+
+18 
+	}
+}
+
+24 
+	$pÝ
+(
+¡ack
+ 
+s
+, 
+v®
+)
+
+27 
+	}
+}
+
+	@/home/jacarrin/doxygen_example/stack.h
+
+5 #iâdeà
+__SAMPLE_H
+
+
+6 
+	#__SAMPLE_H
+
+
+	)
+
+8 
+	~"som‘hšg.h
+"
+
+28 
+	#ENOMEM
+ -1
+
+	)
+
+31 
+	#EXAMPLE
+ -2
+
+	)
+
+33 
+	#EXAMPLE2
+ -3
+
+34 
+
+	)
+
+50 
+	m¡¬t
+;
+
+53 
+	m’d
+;
+
+61 
+	m¡ack
+[100];
+
+64 
+	mid
+;
+
+69 *(*
+	mh–³r
+)(, , *);
+
+70 } 
+	t¡ack
+;
+
+88 
+push
+(
+¡ack
+ 
+s
+, 
+v®
+);
+
+108 
+pÝ
+(
+¡ack
+ 
+s
+);
+
+122 
+g‘_–em
+(
+¡ack
+ 
+s
+, 
+v®
+);
+
+125 
+tÝ
+(
+¡ack
+ 
+s
+);
+
+	@stack.h
+
+5 #iâdeà
+__SAMPLE_H
+
+
+6 
+	#__SAMPLE_H
+
+
+	)
+
+8 
+	~"som‘hšg.h
+"
+
+28 
+	#ENOMEM
+ -1
+
+	)
+
+31 
+	#EXAMPLE
+ -2
+
+	)
+
+33 
+	#EXAMPLE2
+ -3
+
+34 
+
+	)
+
+50 
+	m¡¬t
+;
+
+53 
+	m’d
+;
+
+61 
+	m¡ack
+[100];
+
+64 
+	mid
+;
+
+69 *(*
+	mh–³r
+)(, , *);
+
+70 } 
+	t¡ack
+;
+
+88 
+push
+(
+¡ack
+ 
+s
+, 
+v®
+);
+
+108 
+pÝ
+(
+¡ack
+ 
+s
+);
+
+122 
+g‘_–em
+(
+¡ack
+ 
+s
+, 
+v®
+);
+
+125 
+tÝ
+(
+¡ack
+ 
+s
+);
+
+	@
+1
+.
+1
+/usr/include
+5
+189
+/home/jacarrin/doxygen_example/documentation.h
+/home/jacarrin/doxygen_example/examples/stack_example.c
+/home/jacarrin/doxygen_example/stack.c
+/home/jacarrin/doxygen_example/stack.h
+stack.h

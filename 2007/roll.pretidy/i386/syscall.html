@@ -1,0 +1,71 @@
+<HTML>
+<HEAD>
+<title>i386 System Calls</title>
+</HEAD>
+
+<body>
+<H1><CENTER>i386 System Calls</center></h1>
+
+<hr>
+
+<h2>Software Interrupts</h2>
+
+<p>Probably the easiest way to implement system calls on the i386 is via 
+<i>software interrupts</i>.  If you add an 
+<a href="idt.html#IDTgate">interrupt or trap gate</a>
+to the IDT with a DPL of 3, an application can call this interrupt and 
+it will trap into the kernel routine specified.
+<p>
+
+<p>Arguments for a local function call are usually passed on the 
+application's stack.  However, the kernel and application will
+usually have seperate stacks for purposes of protection.  The i386
+actually provides a mechanism for automatically transferring arguments
+ between stacks of different protection levels, but for now we'll just
+pass a pointer to the arguments in a general purpose register (in this
+case, <b>eax</b>).  The return value for the system call will be
+stored by the kernel into eax before it returns control to the application.
+</p>
+
+<p>To make a system call (assuming that the software interrupt 
+vector is 0x30), call this function in an application, making sure the
+parameters are already set up:
+
+<pre><code>void *appSysCall(void *args[]) {   
+   void *appReturnValue;
+   asm ("int $0x30":"=eax" (appReturnValue):"eax" ((int) args));
+   return appReturnValue;
+}
+</code></pre>
+
+<p>And on the system side, we need to write an assembly wrapper to
+pass <b>args</b> legitimately into the kernelSysCall() function.
+
+<pre><code>/* assembler follows */
+
+.globl asmkernelSysCall
+asmkernelSysCall:
+    pusha                  /* save all registers */
+    pushl %eax             /* pass args[] parameter to sysCall() */
+    call kernelSysCall    
+    addl $4, %esp          /* remove parameter */
+    popa                   /* restore registers */
+    iret                   /* and return to the application */
+
+/* assembler ends */
+
+void kernelSysCall(void *args[], struct regs r) 
+{
+   /*  does stuff according to args[]  */
+
+   r.eax = returnValue;
+}
+
+setExceptionHandler(0x30, &asmkernelSysCall);
+</code></pre>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

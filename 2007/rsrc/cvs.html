@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Using CVS with your os source</title>
+  </head>
+
+  <body>
+      <h1>Using CVS with your os source</h1>
+
+<H1>1. making your cvsroot directory</H1>
+
+CVS keeps all of its files in a directory somewhere.  This directory is refered to as CVSROOT.  You can make this directory by doing the following from you home directory:
+<BLOCKQUOTE><PRE>
+spam 5 ~> mkdir -p cvsroot/CVSROOT
+spam 6 ~> cd cvsroot
+spam 7 ~/cvsroot> cvs init
+</PRE></BLOCKQUOTE>
+
+To tell CVS to use this directory as CVSROOT by setting the CVSROOT environment
+variable.
+<P>
+csh:<BR>
+<BLOCKQUOTE><PRE>
+spam 7 ~> setenv CVSROOT $HOME/cvsroot
+</PRE></BLOCKQUOTE>
+<P>
+sh:<BR>
+<BLOCKQUOTE><PRE>
+$ CVSROOT=$HOME/cvsroot
+$ export CVSROOT
+</PRE></BLOCKQUOTE>
+
+<H1>2.Importing you Souce Tree</H1>
+To import an alreay existing source base make a copy of the existing directory and weed out all the temporary, object, and other non-essestial files.
+
+<BLOCKQUOTE><PRE>
+spam 14 ~> cp -r myos myos.tmp
+spam 15 ~> cd myos.tmp
+spam 16 ~/myos.tmp> rm *~ *.o
+</PRE></BLOCKQUOTE>
+
+Now from withing that use the 'cvs import &lt;repository&gt; &lt;vendor-tag&gt; &lt;release-tag&gt;' command.
+
+<BLOCKQUOTE><PRE>
+spam 17 ~/myos.tmp> cvs import myos konk start
+
+*cvs will ask you to enter version info now *
+
+N myos/main.c
+N myos/Makefile
+
+No conflicts created by this import
+</PRE></BLOCKQUOTE>
+
+now if you look in $CVSROOT you should see a directory made for your os
+
+<BLOCKQUOTE><PRE>
+spam 23 ~/myos.tmp> ls $CVSROOT
+CVSROOT  myos
+</PRE></BLOCKQUOTE>
+
+you can now remove your temporary directory and archive and remove you old os scource directory.
+
+<BLOCKQUOTE><PRE>
+spam 24 ~/myos.tmp> cd ..
+spam 25 ~> rm -r myos.tmp
+spam 26 ~> tar -cf myos-old.tar myos
+spam 27 ~> gzip myos-old.tar
+spam 28 ~> rm -r myos
+</PRE></BLOCKQUOTE>
+
+<H1>3. Checking out your source</H1>
+
+To checkout your source tree simply do a 'cvs checkout &lt;repository&gt;'.
+<BLOCKQUOTE><PRE>
+spam 3 ~> cvs checkout myos
+cvs checkout: Updating myos
+U myos/Makefile
+U myos/main.c
+spam 4 ~> ls myos
+CVS       Makefile  main.c
+</PRE></BLOCKQUOTE>
+
+After this point CVSROOT will be stored in the directory you just checked out so you will not need to set it when using the checked out copy.
+
+<H1>4. Updating Files</H1>
+
+To update the repository simply do a 'cvs update'.  This will update all the source in you checked out copy to reflect changes in the repository.
+
+<BLOCKQUOTE><PRE>
+spam 7 ~/myos> cvs update
+cvs update: Updating .
+U main.c
+</PRE></BLOCKQUOTE>
+
+<H1>5. Commiting Changes</H1>
+
+To push changes back to the repository use the 'cvs commit' command.
+
+<BLOCKQUOTE><PRE>
+spam 33 ~/myos> cvs commit > tmp
+cvs commit: Examining .
+cvs commit: Committing .
+
+*cvs will ask you to enter version info now *
+
+/u/gilling/cvsroot/myos/main.c,v  <--  main.c
+new revision: 1.3; previous revision: 1.2
+done
+</PRE></BLOCKQUOTE>
+
+<H1>6. Adding Files</H1>
+
+To add a file to the repository use the 'cvs add &lt;file&gt;' command followed by a 'cvs commit'. 
+
+
+<BLOCKQUOTE><PRE>
+spam 10 ~/myos> cvs add spam.c
+cvs add: scheduling file `spam.c' for addition
+cvs add: use 'cvs commit' to add this file permanently
+spam 11 ~/myos> cvs commit
+cvs commit: Examining .
+cvs commit: Committing .
+
+*cvs will ask you to enter version info now *
+
+RCS file: /u/gilling/cvsroot/myos/spam.c,v
+done
+Checking in spam.c;
+/u/gilling/cvsroot/myos/spam.c,v  &lt;--  spam.c
+initial revision: 1.1
+done 
+</PRE></BLOCKQUOTE>
+
+<H1>N. Using CVS remotely</H1>
+There are three ways of using cvs remotely:
+<OL>
+<LI><B>pserver</B><BR>
+To use this set your $CVSROOT to ':pserver:&lt;user&gt;@&lt;host&gt;:&lt;cvsroot&gt;' (ex. ':pserver:gilling@spam.acm.uiuc.edu:/home/gilling/cvsroot')
+<P>
+<LI><B>rsh</B><BR>
+This method is less usefull and secure than pserver as the cvs server has to trust the client machine.  To use this set you $CVSROOT to ':ext:&lt;user&gt;@&lt;host&gt;:&lt;cvsroot&gt;'.  (ex. ':ext:gilling@spam.acm.uiuc.edu:/home/gilling/cvsroot' )
+<P>
+<LI><B>ssh</B><BR>
+This methond is better than the rsh method because you can use a password to access the server and is better than pserver because it encrypts both your password and your data.  The disadvantage is your cvs server has to be running sshd and your client has to have ssh.  If you meet both of these conditions use this method.  To use this method simply set things up as with rsh and set $CVS_RSH to ssh.
+</OL>
+      <hr>
+      <address><a href="mailto:konkers@arh0367.urh.uiuc.edu">Erik Gilling</a></address> 
+<!-- Created: Sun Sep 21 17:39:41 CDT 1997 -->
+<!-- hhmts start -->
+Last modified: Tue Sep 30 10:42:52 CDT 1997
+<!-- hhmts end -->
+  </body>
+</html>

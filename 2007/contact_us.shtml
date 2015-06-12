@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- -= SIGOps =- Website++++
+   *  FileName          :     contact_us.php
+   *  Last Modified By  :     vramesh2
+---- -->
+<html>
+<!--#include virtual="head.shtml" -->
+<body>
+<div align="center">
+  <table width="800" border="1"
+  cellpadding="0" cellspacing="0" class="main_tab">
+    <tr>
+      <td>
+         <!--#include virtual="navigation.shtml" -->
+      </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center" valign="top"><img src="images/head_line.jpg" alt="Line" width="800" height="6" /></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center" valign="top"><table width="98%" height="95%" border="0" cellpadding="0" cellspacing="3">
+            <tr>
+              <td height="19" align="left"><p class="heading">CONTACT US 
+                <hr/>
+                </p></td>
+            </tr>
+            <tr>
+              <td height="246" align="left" valign="top" class="main_cell"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="3">
+                    <tr>
+                      <td align="center" valign="top"><table width="95%" height="0" border="0" cellpadding="0" cellspacing="3">
+                          <tr>
+                            <td align="left" valign="top"><p class="small_heading">E-MAIL
+                              <hr/>
+                                </p></td>
+                          </tr>
+                          <tr>
+                           <td align="left" valign="top">
+                           <p class="body_heading">MAILING LIST</p>
+                           <p>Sign up for our <a href="https://www-s.acm.uiuc.edu/cgi-bin/mailman/listinfo/sigops-l" target="_blank">mailing list</a> to get news from SIGOps.</p>
+                           <p class="body_heading">E-MAIL</p>
+                           <p>You can reach sigops by emailing <a href="mailto:sigops-l@acm.uiuc.edu">sigops-l@acm.uiuc.edu</a>.</td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="top"><p class="small_heading">OTHER METHODS 
+                              <hr/></p></td>
+                          </tr>
+                          <tr>
+                           <td align="left" valign="top">
+                           <p class="body_heading">MEETINGS</p>
+                           <p>Come to our meetings.</p>
+                           <p class="body_heading">CHAT</p>
+                           <p>Hopefully, we will set up an irc server or jabber server that people can talk on.</p></td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                            </table></td>
+              </tr>
+          </table></td>
+        </tr>
+        <!--#include virtual="footer.shtml" -->
+      </table></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

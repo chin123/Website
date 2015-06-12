@@ -1,0 +1,55 @@
+<!-- sigops webpage ----------------------------------------------------- -->
+<HTML>
+<HEAD>
+<TITLE>i386 PC Text Mode Information</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" VLINK="#e02020" LINK="#2020f0">
+<CENTER>
+<TABLE WIDTH=600>
+
+<!-- page headers ------------------------------------------------------- -->
+<TR><TD>
+<h1 align="left"><A HREF="/sigops/"><IMG BORDER=0 SRC="/sigops/images/sigops_s.gif" ALT="SigOps: "></A><BR>i386 PC Text Mode Information</h1>
+</TD></TR>
+
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B><a name="vidmem">Video Memory Structure</B><BLOCKQUOTE>
+
+<p>The text mode video screen in the PC is memory-mapped to physical address
+<b>0xb0000</b> on monochrome adapters and <b>0xb8000</b> on color adapters.
+(Our PCs all have color adapters, and most likely any machine you find will
+too.  I merely include the monochrome adapter information for completeness).
+</p>
+
+<p>
+You can access a specific physical address in the PC by merely assigning
+it to a pointer, and then treating the pointer as a reference to an
+array.  Assigning a numeric value to a pointer is just a matter of using
+a typecast:
+
+<pre><code>char *vidmem = (char *) 0xb8000;</code></pre>
+
+<p>The text mode is 80 columns by 25 rows, with 2 bytes per character
+that appears on the screen.  The first byte is the ASCII value of
+the character itself, and the second is the attribute byte.  0x07 is
+white on black, and works fine.  You may want to experiment with
+other colors.
+</p>
+
+</BLOCKQUOTE></TD></TR>
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B><a name="cursor">Cursor manipulation</B><BLOCKQUOTE>
+
+<p>The cursor can be moved.  Check out our <a href="../../rsrc/">code
+snippets resource.</a>
+
+</BLOCKQUOTE></TD></TR>
+<!-- footer start ------------------------------------------------------- -->
+<TR><TD><BR><HR>
+<!--#include virtual="/sigops/footer.html" -->
+</TD></TR>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>
+<!-- end of sigops webpage ---------------------------------------------- -->

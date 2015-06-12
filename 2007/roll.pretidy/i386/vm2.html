@@ -1,0 +1,126 @@
+<HTML>
+<HEAD>
+<title>i386 Virtual Memory</title>
+</HEAD>
+
+<body>
+<H1><CENTER>i386 Virtual Memory</center></h1>
+
+<hr>
+
+<h2>Page Size</h2>
+<p>The i386 has a 4GB (32 bit) address space, consisting of 1,024,576 
+(1MB) possible 4k pages.</p>
+</p>
+
+<h2>Page Tables</h2>
+
+<p>The i386 uses a multi-level page table scheme with two levels.  The
+Page Directory (or topmost Page Table) is pointed to by the 
+<a href="#PDBR">CR3 register</a>.
+The Page Directory and all Page Tables must be page-aligned and use
+up an entire page; they have 1024 entries of 32-bits (4 bytes)
+apiece.</p>
+
+<p>Each of the 1024 entries in the Page Directory points to a Page Table,
+which maps a linear 4MB (1024 pages) of the address space.</p>
+
+<p>A page table entry is 32-bits wide and looks like this:</p>
+
+<img src="ptentry.gif" alt="Page table entry">
+
+<ul>
+<li>P: Present bit.  1 if the page is present in memory, 0 if not.  All other 
+bits are not meaningful to the processor if the P bit is 0 (they can be
+used as a reference to the page's location in mass storage.
+
+<li>R/W:  Read/Write bit.  1 if the page is writable, 0 if read-only.
+
+<li>U/S:  User/Supervisor bit.  1 if the page is user accessible, 0 if not.
+
+<li>D: Dirty bit.  1 if the page has been written to, 0 if not.
+<li>A: Accessed bit.  1 if the page has been accessed, 0 if not.
+<li>AVAIL: 3 bits available for the operating system's use.
+</ul>
+
+<p>For the page to be user-accessible, the U/S bit must be 1 for both
+the page and the page table itself.</p>
+
+<h2>Identity Mapping Page Tables</h2>
+
+<p>Since the page directory has the same format as a page table, it can
+be mapped into itself.  This very conveniently makes the entire page table
+appear to be 4MB of continous linear memory.  The page entry for any 
+logical address can then be accessed with:
+
+<pre><code>unsigned int *getPageEntry(unsigned int address)
+{
+   unsigned int *pageTable = (unsigned int *) 0xffc00000;
+
+   /* 0xffc00000 is the valid address if the page directory was mapped 
+      into the last entry of itself 
+   */ 
+
+   return &pageTable[address >> 12];
+}
+</code></pre>
+
+which returns the address of the entry, for reading and modification.</p>
+
+<h2>Page Faults</h2>
+
+<p>On the i386, exception 14 is used for page faults and other virtual
+memory exceptions.  The associated error code will tell you the exact
+cause of the exception:
+
+<img src="pferr.jpg" alt="Page fault error code">
+
+<ul>
+<li>P: If 0, the page fault is due to a Page Not Present.
+<li>R/W: If 0, the access was a read; if 1, the access was a write.
+<li>U/S: If 0, the accessing program was in supervisor mode (CPL 0,1,2); 
+if 1, it was in user mode.
+</ul>
+
+<p>The CR2 register always holds the exact location of the last page 
+fault, and can be read using the following C function:</p>
+
+<pre><code>unsigned int getCR2(void) {
+    unsigned int _cr2;
+ 
+    asm ("mov %%cr2, %0":"=r" (_cr2):);
+    return _cr2;
+}
+</code></pre>
+
+<a name="PDBR"><h2>The Page Directory Base Register (PDBR)</h2></a>
+
+<p>Control Register 3 (CR3) is often referred to as the Page Directory 
+Base Register (PDBR).  This 32-bit register contains the physical
+address of a page, which should be a Page Directory (if paging is
+turned on, and CR3 is set to an invalid or uninitialized page 
+directory, the machine will most likely suffer an unrecoverable
+fault, since all memory references have just been yanked out
+from under it).</p>
+
+Routines for setting and reading the current value of CR3 follow:
+
+<pre><code>void setCR3(unsigned int pagedir)
+{
+   asm ("mov %0, %%cr3": :"r" (pagedir));
+}
+
+unsigned int getCR3(void)
+{
+   unsigned int _cr3;
+
+   asm ("mov %%cr3, %0":"=r" (_cr3));
+   return _cr3;
+}
+</code></pre>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

@@ -1,0 +1,57 @@
+<!-- sigops webpage ----------------------------------------------------- -->
+<HTML>
+<HEAD>
+<TITLE>"Hello World" OS</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" VLINK="#e02020" LINK="#2020f0">
+<CENTER>
+<TABLE WIDTH=600>
+
+<!-- page headers ------------------------------------------------------- -->
+<TR><TD>
+<h1 align="left"><A HREF="/sigops/"><IMG BORDER=0 SRC="/sigops/images/sigops_s.gif" ALT="SigOps: "></A><BR>"Hello World" OS</h1>
+<h3 align="left">The "Hello World" OS is an example OS to get you started and accustomed
+to the development environment.  <a href="code/helloworld">Here</a> you will
+find a directory
+with the source to this simple OS.
+</h3>
+</TD></TR>
+
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>Explanation of main() in "Hello World" OS</B><BLOCKQUOTE>
+
+char *vidmem = (char *) 0xb8000 is the memory mapped location of the color
+video memory.  Then every other character is written with a letter of
+"Hello World OS" and the other characters are written with 0x7.  0x7 is
+the control character that sets the color of the text to be white on
+black and the attributes that it does npt blink.
+
+</BLOCKQUOTE></TD></TR>
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>Steps to compiling "Hello World" OS</B><BLOCKQUOTE>
+
+<ul>
+<li>Download "Hello World" OS <a href="code/helloworld">directory</a>
+<li>Read main.cc. Understand it.
+<li>Make main.cc with the provided Makefile.  <b>Note:</b> use gmake not make.
+<li>Run bootmaker with the helloworld.ini initilization file.
+<li>Boot the OS using your prefered method
+<ul>
+<li>Use netboot to send the binary file to a machine.
+<li>Use boot.com to boot it from a dos prompt.
+<li>Use the -floppy option on bootmaker to make the image bootable and either
+dd it to a floppy(UNIX) or rawrite(DOS).
+</ul>
+<li>Now add a <a href="hardware/text.html">Text driver</a> for your OS.
+</ul>
+
+</BLOCKQUOTE></TD></TR>
+<!-- footer start ------------------------------------------------------- -->
+<TR><TD><BR><HR>
+<!--#include virtual="/sigops/footer.html" -->
+</TD></TR>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>
+<!-- end of sigops webpage ---------------------------------------------- -->

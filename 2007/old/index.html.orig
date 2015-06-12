@@ -1,0 +1,109 @@
+<html>
+
+<head>
+<title>ACM@UIUC Special Interest Group for Operating Systems</title>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" vlink="#0000ff" link="#0000ff">
+
+<center>
+
+<table width="75%">
+<tr>
+<td>
+
+<center>
+<img src="/sigops/images/sigops.gif" alt="SigOps" width="515" height="128">
+<h3>(The Special Interest Group for Operating Systems)</h3>
+</center>
+<hr>
+
+<p><b>About SigOps</b></p>
+
+<p>
+Our purpose is to learn about and teach computer operating
+systems and their development through dicussion and projects.
+</p>
+<hr>
+
+<p><b>Meeting Time</b></p>
+<p>
+Meetings are Thursday nights at 8:00 pm in 1104 Siebel (ACM office).
+</p>
+<hr>
+<h3> Fetured event: 
+	<a href="lkm_tut">sigops linux kernel module tutorial/workshop</a>
+     </h3>
+
+<hr>
+
+<!-- <h2><font color="red">Please Note: This site is horrendously out of date/inaccurate.  I am 
+working to update it, but I am buried with schoolwork, so it could be a while 
+before everything is nice and pretty.</font></h2> -->
+
+<p><b>Projects</b></p>
+<ul>
+<li><a href="roll_your_own"><i>How to Write Your Own Operating System</a></i>,
+a SigOPS exclusive</li>
+<li><a href="eoh98">DFE -- Distributed Fish Enviroment</a></i>,
+SigOps EOH98 project.</li>
+<li><a href="rsrc">OS Development Resources</a></li>
+<LI><A HREF="eoh01">SigOps Rover</A>, an Internet controlled electric
+car.</LI>
+<li>
+	<a href="lkm_tut">sigops linux kernel module tutorial/workshop</a>
+</li>
+<li><a href="alectos">Alectos project and development pages</a>.  Currently in a
+state of flux.</li>
+</ul>
+
+New ideas are always welcome. Mail to the SigOps mailing list to suggest other
+project ideas: <a href="mailto:sigops-l@acm.uiuc.edu">sigops-l@acm.uiuc.edu</a>
+<hr>
+
+<p><b>Members' Operating Systems</b> (external links)</p>
+<p>
+These operating systems are independent development efforts and are
+not affiliated with the ACM or the University.
+</p>
+
+<ul>
+<li><a href="http://www.openblt.org"><b>OpenBLT</b></a> (Brian Swetland and
+        Sid Cammeresi)</li>
+<li><b>Xtreme/OS</b> (Doug Armstrong)</li>
+<li><b>DaveOS</b> (Dave Wentzlaff) </li>
+<li><a href="http://www.uiuc.edu/ph/www/gilling/konkos"><b>KoNK/OS</b></a>
+        (Erik Gilling) </li>
+</ul>
+<hr>
+
+<p><b>Links (I'll put some more up here later in the semester...)</b></p>
+<ul>
+<li>
+	<a href="http://www.dit.upm.es/~jmseyas/linux/kernel/hackers-docs.html">Listing</a> of a bunch of Linux kernel docs, straight from the kernel Documentation directory.</li>
+<li><a href="http://www.cs.utah.edu/projects/flux/index.html">Flux Operating
+System Toolkit</a> (Ed. Note: Kinda interesting, but we haven't dealt with it in a long time)</li>
+<hr>
+
+</td>
+</tr>
+</table>
+
+<p>
+[ <a href="/sigops">SigOps Home</a>
+| <a href="/">ACM@UIUC Home</a>
+| <a href="mailto:sigops@uiuc.edu">Feedback</a>
+]
+<br> <br>
+Copyright &copy; 1996-2002 ACM@UIUC
+</p>
+
+<address>
+http://www.acm.uiuc.edu<!--#echo var="DOCUMENT_URI" --><br>
+Questions, comments, trials, tribulations, animosity, and civil strife can be directed at: <a href="mailto:sigops@acm.uiuc.edu">sigops@acm.uiuc.edu</a> 
+</address>
+
+</center>
+</body>
+</html>
+
