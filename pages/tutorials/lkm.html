@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" href="../../img/favicon.ico"> 
+	<link rel="stylesheet" href="../../css/vendor/fluidbox.min.css">
+	<link rel="stylesheet" href="../../css/main.css">
+
+	<title>Tutorials - SIGOPS ACM@UIUC</title>
+
+</head>
+<body>
+
+
+	<header>
+
+		<div id="logo-container">
+			<div id="logo"><a href="../../index.html"><img src="../../img/logo-256.png"></a></div>
+
+			<div id="subtitle">A Special Interest Group for Operating Systems</div>
+		</div>
+ 		<nav id="logo-container">
+			<ul>
+				<li><a href="../tutorials.html">Tutorials</a></li>
+				<li><a href="../projects.html">Projects</a></li>
+				<li><a href="../about.html">About</a></li> 
+			</ul>
+		</nav>
+
+	</header>
+
+	<div id="content">
+
+		<section class="intro">
+			<h1>Writing a Linux Kernel Module<span class="nl"></span></h1>
+			<p> 
+				A kernel module is code that can dynamically be loaded and unloaded into the kernel. They can add features to the kernel, all without having to reboot, or recompile. Here, we will see how to write a "Hello World" LKM.
+			</p>
+		</section>
+
+		<section class="row">
+			<div class="col-full">
+				<h2>Table of Contents</h2>
+				<p>
+					<ol>
+						<li><a href="#writing-hello-world">Writing "Hello World"</a></li>
+						<li><a href="#compiling-hello-world">Compiling "Hello World"</a></li>
+					<ol/>
+				</p>
+			</div>
+		</section>
+
+		<section class="row" id="writing-hello-world">
+			<div class="col-full">
+				<h2>Writing "Hello World"</h2>
+				<p>
+					Any kernel module has 2 functions, <code>init_module()</code> and <code>cleanup_module()</code>. These functions are the start and the end of the module. These function names can be changed to whatever you may want, but this is pretty much the standard. Here's what a basic kernel module looks like:
+				</p>
+				<pre>
+#include &#60;linux/module.h&#62;
+#include &#60;linux/kernel.h&#62;
+
+int init_module(void)
+{
+	printk(KERN_INFO "Hello world!\n");
+	return 0;
+}
+
+void cleanup_module(void)
+{
+	printk(KERN_INFO "Removing the Kernel Module!\n");
+}
+				</pre>
+				<p>
+					What's happening in this code? Essentially, we initalize the kernel module by printing out "Hello World". However, a keen reader might have noticed that we are not using <code>printf()</code>, but rather, we are using <code>printk()</code>; why is this? One must realize that this code is running from within the kernel; we are no longer in userland! Because of this, special variations of basic functions are used in the kernel.
+				</p>
+				<p>
+					When the module is removed, we are printing out "Removing the Kernel Module!", and that's it! In addition, you might have noticed we have to insert two <code>include</code> tags, specifically, <code>linux/module.h</code> and <code>linux/kernel.h</code>. In the next section we will see how to compile this module and load it.
+				</p>
+			</div>
+		</section>
+
+		<section class="row" id="compiling-hello-world">
+			<div class="col-full">
+				<h2>Compiling Hello world</h2>
+				<p>
+					Now that we have a module, let's compile it. For this we will write a makefile that will compile the module for us
+				</p>
+			</div>
+		</section>
+
+		<section class="row">
+			<div class="col-full">
+				<p>
+					2016 - A Special Interest Group of <a href="http://www-s.acm.illinois.edu">ACM@UIUC</a>
+				</p>
+			</div>
+		</section>
+ 
+	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script>
+	if (!window.jQuery) 
+	{
+	    document.write('<script src="../../js/vendor/jquery.1.11.min.js"><\/script>');
+	}
+	</script>
+
+	<script src="../../js/vendor/jquery.fluidbox.min.js"></script>
+	<script src="../../js/main.js"></script>
+</body>
+</html>
+
