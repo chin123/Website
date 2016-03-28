@@ -24,7 +24,7 @@
 		</div>
  		<nav id="logo-container">
 			<ul>
-				<li><a href="../tutorials.html">Tutorials</a></li>
+				<li><a class="bordered" href="../tutorials.html">Tutorials</a></li>
 				<li><a href="../projects.html">Projects</a></li>
 				<li><a href="../about.html">About</a></li> 
 			</ul>
@@ -48,6 +48,7 @@
 					<ol>
 						<li><a href="#writing-hello-world">Writing "Hello World"</a></li>
 						<li><a href="#compiling-hello-world">Compiling "Hello World"</a></li>
+						<li><a href="#installing-hello-world">Installing "Hello World"</a></li>
 					<ol/>
 				</p>
 			</div>
@@ -85,11 +86,47 @@ void cleanup_module(void)
 
 		<section class="row" id="compiling-hello-world">
 			<div class="col-full">
-				<h2>Compiling Hello world</h2>
+				<h2>Compiling "Hello world"</h2>
 				<p>
-					Now that we have a module, let's compile it. For this we will write a makefile that will compile the module for us
+					Now that we have a module, let's compile it. For this we will write a makefile that will compile the module for us. There is one catch though. One thing that is required to compile this module is the linux source tree. This is because our code depends on files available in the linux source. Let's see how this pans out in our makefile.
 				</p>
-			</div>
+				<pre>
+TARGET  := hello-1
+WARN    := -W -Wall -Wstrict-prototypes -Wmissing-prototypes
+INCLUDE := -isystem /lib/modules/`uname -r`/build/include
+CFLAGS  := -O2 -DMODULE -D__KERNEL__ ${WARN} ${INCLUDE}
+CC      := gcc-3.0
+	
+${TARGET}.o: ${TARGET}.c
+
+.PHONY: clean
+
+clean:
+    rm -rf ${TARGET}.o
+				</pre>
+				<p>
+					Lets see what eqach of our variables mean:<br>
+					<code>TARGET</code> is the file we are compiling.<br>
+					<code>WARN</code> is warning flags for us, just so we don't write bad code.<br>
+					<code>INCLUDE</code> is what we need from the linux source.<br>
+					<code>CFLAGS</code> and <code>CC</code> compile the module for us.<br>
+				</p>
+				<p>
+					With this makefile, we can run <code>make</code> in our terminal and we will get a <code>.ko</code> file that represents our module.
+				</p>
+			</div>	
+		</section>
+
+		<section class="row" id="installing-hello-world">
+			<div class="col-full">
+				<h2>Installing "Hello world"</h2>
+				<p>
+					To install our kernel module, simply run: <code>sudo insmod hello.ko</code>, or <code>whatever.ko</code>, depending on what your module is called. Once you run the command, you will see your module printed out what you told it to print in the init function. To remove the module, just run <code>sudo rmmod hello</code>, and you will see the cleanup message printed out!. If you don't know what your module's name is, you can run <code>cat /proc/modules</code> and Linux will print out a list of all modules.
+				</p>
+				<p>
+					Some people might not see a message printed out when installing or removing the kernel module. In this case, Linux has just piped the information into a log file. To read this, just run <code>cat /var/log/messages</code> which will print out all messages from the kenel to the user.
+				</p>
+			</div>	
 		</section>
 
 		<section class="row">
