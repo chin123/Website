@@ -1,0 +1,26 @@
+<HTML>
+<HEAD>
+<title>Development Environment</title>
+</HEAD>
+
+<body>
+<H1><CENTER>Development Environment</center></h1>
+<h3><center>the first chapter in our series on <i>How to Write an 
+Operating System</i></center></h3>
+
+<hr>
+<h2>Your Mission</h2>
+
+<p>
+<a href="1.a.html">Compile</a> and 
+<a href="1.b.html">run</a> a basic program to display "Hello World!".
+Then, write a <a href="hardware/text.html">text output</a> driver to 
+handle displaying text, numbers, addresses, and more, as well as scrolling 
+the display.  
+</p>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

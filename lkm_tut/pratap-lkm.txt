@@ -1,0 +1,262 @@
+Loadable Kernel Modules
+---------------------
+- pratap <xtremist@hacktivismo.com>
+
+1. Introduction
+2. "Hello World"
+3. Kernel Symbols
+4. Usage Count
+5. LKM parameters
+6. Kernel Space and User space
+7. System calls
+8. Basic Char Driver
+9. Other resources
+
+Introduction
+------------
+LKM's are code which can be dynamicaly be inserted into the linux kernel without
+recompilation. LKM's are mostly used for device drivers, and sometimes used
+by crackers for syscall redirection. The included code is tested on 2.4, but needs
+minor changes to work on previous kernel versions.
+
+"Hello World"
+-------------
+Let us first program a LKM to display 'hello world' and analyze the code.
+
+-----------hello.c--------------
+#define MODULE
+#define __KERNEL__
+#include <linux/module.h>
+
+int init_module () {
+	printk ("Hello World\n");
+	return (0);
+}
+
+void cleanup_module () {
+	}
+
+------------hello.c-------------
+
+First of all, we need to declare MODULE and __KERNEL__ to let the compiler know
+that it is a lkm and also to let the include's include the appropriate stuff.
+
+The include's for an lkm are different from that of normal applications. They
+use the directory /usr/src/linux/include .
+
+Moreover, we cannot use normal libc functions like printf, scanf..etc. We have
+to restrict ourselves to the kernel API. A full list of the kernel functions
+can be found in [1].
+
+Another difference between user applications and lkm's is that user applications
+ execute linearly (usually), while lkm's remain in memory and the execute when
+the kernel calls them.
+
+The init_module function is an entry point into the lkm. It executes when the lkm is first loaded into memory. This function is usually
+used to get arguments, register devices,protocols and other things which need to be done once.
+
+The cleanup_module function is an exit point in the lkm. It executes when the 
+lkm is unloaded from memory. Usually used to unregister all the things registered in init_module.
+
+Here's the Makefile for the above program
+
+--------------Makefile------------------
+KDIR = /usr/src/linux
+include $(KDIR)/.config
+
+CFLAGS = -D__KERNEL -DMODULE -I$(KDIR)/include -Wall
+
+all: hello.o
+
+--------------Makefile------------------
+
+Quick explaination of the Makefile. We need to -I to specify the kernel include's directory. We also include /usr/src/linux/.config, so that
+ the lkm gets built for your specific kernel (If it was build for someother kernel we get an error while loading it, we over come this error
+  with the -f flag for insmod specified later).
+
+Next we load the lkm
+
+----------------------------------------
+root@mir ~/lkmdoc# make
+root@mir ~/lkmdoc# insmod hello.o
+Hello World
+----------------------------------------
+
+We check for the loaded module by lsmod or by /proc/modules
+
+----------------------------------------
+root@mir ~/lkmdoc# lsmod
+Module                  Size  Used by
+hello                    304   0  (unused)
+root@mir ~/lkmdoc#
+----------------------------------------
+
+Quick notes on lsmod. The size is the number of bytes of the module. The 'Used' coloum refers 
+to the reference count of the module. If another module is utilizing our module, the reference count
+will be greater than 0. 
+
+Unload the module by 'rmmod hello'. This will now call cleanup_module and then remove the module
+from memory. If the reference count isnt 0, then the module cannot be unloaded.
+
+On systems running klogd we maynot see the 'Hello World' on the terminal. This is because printk
+will send the message to klogd. If the priority of our message is above the default priority
+then we will not see the message. On my system the default priority is 4. By default, the messages
+have a priority greater than 4. Due to this we do not see it on our terminal. Klogd logs the 
+messages to /proc/kmsg. If we need to change the priority of our messages, we can specify it
+on printk.
+e.g
+	printk ("<1>Hello World!\n");
+
+This will send messages with priority 1. Due to this we will see it on our terminal.
+
+Kernel Symbols
+--------------
+
+When we register our module, we export our functions. This means that other modules can access
+our functions (i.e they are global). When developing big projects, we want to avoid our function
+names clashing with other names. Hence, it is useful to control the exported symbols.
+
+The kernel symbols are mentioned in /proc/ksyms. 
+
+Here's example code to illustrate the above.
+
+------------------ksyms.c----------------------
+#define MODULE
+#define __KERNEL__
+#include <linux/module.h>
+
+int xtremist () {
+return 0;
+}
+
+int init_module () {
+        xtremist();
+        return (0);
+}
+
+void cleanup_module () {
+        }
+-----------------ksyms.c-----------------------
+
+-----------------------------------------------
+root@mir ~/lkmdoc# insmod ksyms.o
+root@mir ~/lkmdoc# grep ksyms /proc/ksyms
+d185b000 __insmod_ksyms_O/mnt/crypt/root/lkmdoc/ksyms.o_M3DC2999D_V132114       [ksyms]
+d185b060 __insmod_ksyms_S.text_L40      [ksyms]
+d185b060 xtremist       [ksyms]
+root@mir ~/lkmdoc#
+-----------------------------------------------
+
+As we see our function xtremist got exported. All functions by default get exported.
+
+One way to avoid exporting functions is to specify the keyword 'static' before the function.
+e.g
+static int xtremist () {..........}
+
+Another way to prevent exporting functions/variables is to specify EXPORT_NO_SYMBOLS; anywhere in
+the module. This will stop the default behavior of exporting all functions/variables.
+
+Sometimes however we would like to export selected symbols. We do that with the help of 
+EXPORT_SYMBOL (symbol_name); Note however this has to be outside all functions.
+
+----------------ksyms.c-----------------------
+#define MODULE
+#define EXPORT_SYMTAB
+#define __KERNEL__
+#include <linux/module.h>
+
+
+int xtremist () {
+return 0;
+}
+int xtremist1 () {
+return 0;
+}
+EXPORT_SYMBOL (xtremist);
+
+int init_module () {
+        EXPORT_NO_SYMBOLS;
+        xtremist();
+        return (0);
+}
+
+void cleanup_module () {
+        }
+---------------------------------------------
+We need to define EXPORT_SYMTAB before using EXPORT_SYMBOL(..). First we stop all symbols from being
+ exported. Next we selectivly export only the xtremist function. Lets take a look at ksyms.
+
+---------------------------------------------
+root@mir ~/lkmdoc# grep ksyms /proc/ksyms
+d185b000 __insmod_ksyms_O/mnt/crypt/root/lkmdoc/ksyms.o_M3DC2999D_V132114       [ksyms]
+d185b060 __insmod_ksyms_S.text_L40      [ksyms]
+d185b060 xtremist       [ksyms]
+root@mir ~/lkmdoc#
+---------------------------------------------
+
+As we expect, xtremist1 isnt exported. 
+
+Usage Count
+-----------
+
+As we saw earlier, lsmod shows us the reference count. We can remove the module from memory only
+when the reference count is 0. Sometimes we would like to modify the reference count manually.
+The include's gives us two macros to play with the reference count.
+
+MOD_INC_USE_COUNT
+
+MOD_DEC_USE_COUNT
+
+As the names suggest, the first is used to increment the reference count and the second to decrement
+ it.
+
+LKM parameters
+--------------
+Sometimes we would like to configure our lkm dynamically. In conventional C, we have *argv[] to
+pass parameters into our program. In LKM's we need to use macros to access the parameters.
+
+Syntax: 
+MODULE_PARAM (variable, type)
+
+Types:
+s - string
+i - integer
+b - byte
+h - 2 bytes
+l - 4 bytes
+
+The code below will illustrate the above.
+
+---------------param.c------------------
+#define MODULE
+#define __KERNEL__
+#include <linux/module.h>
+
+char *test_str = "HEY";
+
+MODULE_PARM(test_str,"s");
+
+
+int init_module () {
+        printk ("%s\n" , test_str);
+        return (0);
+}
+
+void cleanup_module () {
+        }
+----------------------------------------
+
+One thing to note is that we can specify a default value. When no param is specified on the 
+command line test_str defaults to "HEY". But when we do specify, it gets over-written.
+
+---------------------------------------
+root@mir ~/lkmdoc# insmod param.o
+HEY
+root@mir ~/lkmdoc# rmmod param
+root@mir ~/lkmdoc# insmod param.o test_str="TEST"
+TEST
+root@mir ~/lkmdoc#
+---------------------------------------
+
+
+

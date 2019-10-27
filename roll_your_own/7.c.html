@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title>PCI</title>
+  </head>
+
+  <body>
+    <center>
+      <h1>PCI</h1>
+    </center>
+
+    <center>
+      <h3>the first part of the seventh chapter in our series on <i>How to
+      Write an Operating System</i></h3>
+    </center>
+    <hr>
+
+    <h2>PCI</h2>
+
+    <h3>Overview</h3>
+
+    <p>A friend once said that "hardware engineers live to make software
+    engineers lives hell." PCI is on of the exceptions that actually works in
+    a usefull manner. In most architecture the PCI bridge handles most
+    everything such as Memory Mapped IO, DMA, and I/O ports it you are on a
+    PC. All that you don't have to worry too much about except for
+    configuring it.</p>
+
+    <p>PCI, also, provides an intellegent configuration mechanism. Each
+    device has either 64 or 256 bytes of configuration space. The 64 bytes
+    are a <a href="7.c.0.html">standard header format</a>. The last 192 bytes
+    are left for device specific configureation. By the time your OS boot the
+    BIOS/Firmware will have set most of the important information such as IRQ
+    and IO address. Your OS need only read these values and start using them.
+    Thats right no jumpers. No probing. Does it get any better than this?</p>
+
+    <h3>Addresses in PCI</h3>
+
+    <p>PCI has a special way of representing addresses when dealing with the
+    config space. Values not only include location but address type
+    (memory/io) and various other flags. The two formats are as follows:</p>
+    <b>Memory Address</b> 
+
+    <table border="1">
+      <tr>
+        <td width="30%" align="left">31</td>
+
+        <td width="30%" align="right">4</td>
+
+        <td width="10%">3</td>
+
+        <td width="10%">2</td>
+
+        <td width="10%">1</td>
+
+        <td width="10%">0</td>
+      </tr>
+
+      <tr>
+        <td colspan="2">Base address</td>
+
+        <td>P</td>
+
+        <td colspan="2">Type</td>
+
+        <td>0</td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>P</td>
+
+        <td>Prefetchable</td>
+      </tr>
+
+      <tr>
+        <td valign="top">Type</td>
+
+        <td>
+          <table>
+            <tr>
+              <td>00</td>
+
+              <td>Located anywhere in 32-bit address space</td>
+            </tr>
+
+            <tr>
+              <td>01</td>
+
+              <td>Located below 1 MB</td>
+            </tr>
+
+            <tr>
+              <td>10</td>
+
+              <td>Located anywhere in 64-bit address space</td>
+            </tr>
+
+            <tr>
+              <td>11</td>
+
+              <td>Reserved</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <b>IO Address</b> 
+
+    <table border="1">
+      <tr>
+        <td width="40%" align="left">31</td>
+
+        <td width="40%" align="right">2</td>
+
+        <td width="10%">1</td>
+
+        <td width="10%">0</td>
+      </tr>
+
+      <tr>
+        <td colspan="2">Base address</td>
+
+        <td>R</td>
+
+        <td>1</td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>R</td>
+
+        <td>Reserved</td>
+      </tr>
+    </table>
+
+    <h2>Processor Implementations</h2>
+
+    <ul>
+      <li><a href="i386/pci.html">i386</a></li>
+    </ul>
+    <hr>
+    <!--#include virtual="/include/footer.html" -->
+  </body>
+</html>
+

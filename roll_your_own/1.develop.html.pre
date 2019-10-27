@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title>Development Environment</title>
+  </head>
+
+  <body bgcolor="ffffff">
+    <center>
+      <h1>Development Environment</h1>
+    </center>
+    <hr>
+    Minimally, you need the following: 
+
+    <ul>
+      <li>a <b>development machine</b> with compilation, debugging, and
+      support tools installed for the target system.</li>
+
+      <li>a <b>test machine</b> of the same type as your target system. This
+      machine houses the boot loader and some mechanism for getting the
+      operating system from the development machine.</li>
+
+      <li>some kind of <b>connection</b> between the machines - a network or
+      serial cable works best. Using a floppy drive would be passable but
+      painful.</li>
+    </ul>
+
+    <p>Your development and target systems could be the same machine, but
+    until your operating system can host the development environment by
+    itself, you will waste a good deal of time switching between testing and
+    development environments (which oftentimes involves a reboot).</p>
+
+    <p>How to <a href="devel_env.html">set up</a> your own development
+    environment at home.</p>
+
+    <p>Check out the ACM@UIUC operating system <a href="acm.html">development
+    environment</a>.</p>
+    <hr>
+    <!--#include virtual="/include/footer.html" -->
+  </body>
+</html>
+

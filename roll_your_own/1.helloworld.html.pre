@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title>"Hello World" OS</title>
+  </head>
+
+  <body bgcolor="ffffff">
+    <center>
+      <h1>The "Hello World" OS</h1>
+    </center>
+    <hr>
+
+    <p>The "Hello World" OS is an example OS to get you started and
+    accustomed to the development environment. <a href=
+    "code/helloworld">Here</a> you will find a directory with the source to
+    this simple OS.</p>
+
+    <p><b>Explanation of main() in "Hello World" OS</b></p>
+
+    <p>char *vidmem = (char *) 0xb8000 is the memory mapped location of the
+    color video memory. Then every other character is written with a letter
+    of "Hello World OS" and the other characters are written with 0x7. 0x7 is
+    the control character that sets the color of the text to be white on
+    black and the attributes that it does npt blink.</p>
+
+    <p><b>Steps to compiling "Hello World" OS</b></p>
+
+    <ul>
+      <li>Download "Hello World" OS <a href=
+      "code/helloworld">directory</a></li>
+
+      <li>Read main.cc. Understand it.</li>
+
+      <li>Make main.cc with the provided Makefile. <b>Note:</b> use gmake not
+      make.</li>
+
+      <li>Run bootmaker with the helloworld.ini initilization file.</li>
+
+      <li>
+        Boot the OS using your prefered method 
+
+        <ul>
+          <li>Use netboot to send the binary file to a machine.</li>
+
+          <li>Use boot.com to boot it from a dos prompt.</li>
+
+          <li>Use the -floppy option on bootmaker to make the image bootable
+          and either dd it to a floppy(UNIX) or rawrite(DOS).</li>
+        </ul>
+      </li>
+
+      <li>Now add a <a href="hardware/text.html">Text driver</a> for your
+      OS.</li>
+    </ul>
+    <br>
+     <br>
+     
+    <hr>
+    <!--#include virtual="/include/footer.html" -->
+  </body>
+</html>
+

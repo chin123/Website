@@ -1,0 +1,85 @@
+<!-- sigops webpage ----------------------------------------------------- -->
+<HTML>
+<HEAD>
+<TITLE>Bootstrap strategy</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" VLINK="#e02020" LINK="#2020f0">
+<CENTER>
+<TABLE WIDTH=600>
+
+<!-- page headers ------------------------------------------------------- -->
+<TR><TD>
+<h1 align="left"><A HREF="/sigops/"><IMG BORDER=0 SRC="/sigops/images/sigops_s.gif" ALT="SigOps: "></A><BR>Using the Boot Loader</h1>
+</TD></TR>
+
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>Decide on your bootstrap strategy</B><BLOCKQUOTE>
+
+<p>How you are going to boot your new OS is going to vastly vary
+depending on the architecture you are using.  Here is how to use the
+SigOps uBoot system on a variety of architectures.  The uBoot system is a
+great resource provided by us that can get you off the ground and going
+right away.  The concept is simple, compile to elf or object files
+and create a SBBB (SigOps Bitchin' Boot Block) boot image using
+bootmaker, then boot using the method of your choice.  Here is the <a
+href="../rsrc/boot.html">technical documentation</a> for the uBoot system.
+The source is available as well.  (sorry, not yet available).</p>
+
+</BLOCKQUOTE></TD></TR>
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>Here are the components of the uBoot system and what they do for you:</B><BLOCKQUOTE>
+
+<ul>
+<li><a href="../rsrc/boot.html#boot.com">boot.com</a>:  This is a boot
+loader that will load a SBBB from a machine
+running DOS in real mode.  Here is some more <a href="1.c.html">technical
+information</a> about the boot loader.
+(<a href="boot/boot.com">Download</a>) (Source)
+<li><a href="../rsrc/boot.html#bootmaker">bootmaker</a>:  a unix utility
+that packages up object files into a SBBB
+image.  use the -floppy flag to make an image that includes a boot sector
+and is ready to be raw written to disk and booten (for the PC
+architecture only, sorry) (Download <a href="code/bootmaker.aix">AIX</a>
+<a href="code/bootmaker.sun">sun</a> <a
+href="code/bootmaker.linux">linux</a>) (<a href="code/util.tar.gz">Source</a>)
+<li><a href="../rsrc/boot.html#netboot">netboot</a>: a unix utility to
+send a SBBB image to a remote computer. (Download <a
+href="code/netboot.aix">AIX</a> <a href="code/netboot.sun">sun</a> <a
+href="code/netboot.linux">linux</a>) (<a href="code/util.tar.gz">Source</a>)
+<li>netrom.bin: this image can be burned onto an EPROM and put on an ISA
+NE2000 network card to boot off of.  it will automaticlly RARP for it's
+IP, so make sure you setup a RARP server.  (<a
+href="code/netrom.bin">Download</a>) (Source)
+<li>netboot.bin: this is an image that can be booted with boot.com to
+enter the netboot system.  (<a href="code/netboot.bin">Download</a>) (Source)
+</ul>
+
+</BLOCKQUOTE></TD></TR>
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>How does booting work on various architectures you ask?  Here's how:</B><BLOCKQUOTE>
+
+<ul>
+<li>i386<ul>
+<li>from DOS in "real" mode transfer the image to the test bed through
+some means such as FTP or NFS (using a DOS client such as
+<a href="ftp://spam.acm.uiuc.edu/pub/sigops/xfs191.zip">XFS v1.91</a>.
+then boot using boot.com.
+<li>from DOS enter the netboot system using boot.com and send the image
+from a remote system.
+<li>from the boot secter of a floppy with an image constructed with
+<code>bootmaker -floppy</code>.
+<li>from a boot ROM enter the netboot system.
+</ul>
+<li>sparc<ul>
+</ul></ul>
+
+</BLOCKQUOTE></TD></TR>
+<!-- footer start ------------------------------------------------------- -->
+<TR><TD><BR><HR>
+<!--#include virtual="/sigops/footer.html" -->
+</TD></TR>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>
+<!-- end of sigops webpage ---------------------------------------------- -->

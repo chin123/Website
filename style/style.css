@@ -1,0 +1,136 @@
+/* -= SIGOps =- Website++++
+ * FileName          :     style.css
+ * Last Modified By  :     vramesh2
+ ----*/
+body {
+      background-image: url(../images/bg_img.jpg);
+      margin-top: "0";
+      margin-left: "0";
+      }
+a.main_nav {
+      font-family: "Century Gothic", Arial, sans-serif;
+      font-size: 12px;
+      color: #78BCCF;
+      text-decoration: none;
+      font-weight: bold;
+      }
+a.main_nav:hover {
+      font-family: "Century Gothic", Arial, sans-serif;
+      font-size: 12px;
+      color: #993537;
+      text-decoration: none;
+      font-weight: bold;
+      }
+a.main_nav:active {
+      font-family: "Century Gothic", Arial, sans-serif;
+      font-size: 12px;
+      color: #993537;
+      text-decoration: none;
+      font-weight: bold;
+      }
+a.main_nav:focus {
+      font-family: "Century Gothic", Arial, sans-serif;
+      font-size: 12px;
+      color: #993537;
+      text-decoration: none;
+      font-weight: bold;
+      }
+a {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      color: #993537;
+      text-decoration: none;
+      font-weight: normal;
+      }
+a:hover {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      color: #78BCCF;
+      text-decoration: none;
+      font-weight: normal;
+      }
+a:active {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      color: #78BCCF;
+      text-decoration: none;
+      font-weight: normal;
+      }
+a:focus {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      color: #78BCCF;
+      text-decoration: none;
+      font-weight: normal;
+      }
+p.heading {
+      font-family: "Century Gothic", Arial, sans-serif;
+      font-size: 13px;
+      color: #78BCCF;
+      text-decoration: none;
+      font-weight: bold;
+      }
+p.small_heading {
+      font-family: "Century Gothic", Arial, sans-serif;
+      font-size: 12px;
+      color: #993537;
+      text-decoration: none;
+      font-weight: bold;
+      }
+p.side_heading {
+      font-family: "Century Gothic", Arial, sans-serif;
+      font-size: 10px;
+      color: #993537;
+      text-decoration: none;
+      font-weight: bold;
+      }
+p.body_heading {
+      font-family: "Century Gothic", Arial, sans-serif;
+      font-size: 11px;
+      color: #993537;
+      text-decoration: none;
+      font-weight: bold;
+      }
+p.body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      color: #333333;
+      text-decoration: none;
+      font-weight: normal;
+      }
+p {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      color: #333333;
+      text-decoration: none;
+      font-weight: normal;
+      }
+table.main_tab {
+      background-color: #FFFFFF;
+      border-color: #CCCCCC;
+      border: #CCCCCC;
+      border-spacing: 0px;
+      }
+td.side_cell {
+      background-color: #D6D6D6;
+      border: none;
+      border-spacing: 0px;
+      }
+td.main_cell {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      background-color: #E8E8E8;
+      border: none;
+      border-spacing: 0px;
+      }
+ul.body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:10px;
+      color: #333333;
+      font-weight: normal;
+      }
+hr {
+      height:   auto;
+      list-style:   square;
+      color:#999999;
+      }

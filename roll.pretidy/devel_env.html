@@ -1,0 +1,74 @@
+<HTML>
+<HEAD>
+<TITLE>Building a development environment</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Building a development environment</H1>
+
+Our standard development environment consists of two machines, a development
+workstation and a testbed machine.  The workstation needs to be a unix variant
+which is able to compile gnu binutils and gcc.  The testbed needs to be a 386
+with at least 2 megs of ram an a network and video card.
+
+<H2>Setting up the Workstation</H2>
+
+<H3>Building the cross compiler</H3>
+
+To build a cross compiling suite you need the following packages from you 
+	nearest gnu archive:
+<UL>
+	<LI><A HREF="ftp://uiarchive.cso.uiuc.edu/pub/gnu/binutils-2.7.tar.gz">
+		binutils-2.7</A> Later versions produce elf headers inconsistant
+		with the workshop
+	<LI><A HREF="ftp://uiarchive.cso.uiuc.edu/pub/gnu/gcc-2.7.2.3.tar.gz">
+		gcc-2.7.2.3</A> Later version will not work with c++ due to
+		exception handlind
+</UL>
+
+<H4>Compiling</H4>
+
+<B>binutils</B><BR>
+First compile binutils for the i386-unknown-gnu target.  You will likely want
+to specify an install prefix like /usr/local/xdev as to not dirty the rest
+of you machine.
+
+<PRE>
+silverbolt_18# gnzip -c binutils-2.7.tar.gz | tar -xf -
+silverbolt_19# cd binutils-2.7/
+silverbolt_20# ./configure --target=i386-unknown-gnu --prefix=/usr/local/xdev
+
+<i>configure runs</i>
+
+silverbolt_21# make
+
+<i>make runs</i>
+
+silverbolt_23# make install 
+
+<i>make runs</i>
+</PRE>
+
+<B>gcc</B><BR>
+Next compile gcc for the i386-unknown-gnu target. Only compile the c and c++ 
+compilers.  The objective c compiler need runtime library which is OS specific.
+
+<PRE>
+silverbolt_27# gunzip -c gcc-2.7.2.3.tar.gz | tar -xf -
+silverbolt_28# cd  gcc-2.7.2.3/
+silverbolt_29# ./configure --target=i386-unknown-gnu --prefix=/usr/local/xdev
+
+<i>configure runs</i>
+
+silverbolt_30# make LANGUAGES="c c++" LIBGCC=/dev/null
+
+<i>make runs</i>
+
+silverbolt_31# /usr/local/xdev/386-unknown-gnu/bin/ar rc libgcc2.a
+silverbolt_32# make LANGUAGES="c c++" LIBGCC=/dev/null install
+
+<i>make runs</i>
+
+
+</PRE>
+</BODY>
+</HTML>

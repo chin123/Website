@@ -1,0 +1,173 @@
+<!-- sigops webpage ----------------------------------------------------- -->
+<html>
+
+<head>
+<title>SigOps: OS Development Resources</title>
+<script language="JavaScript" fptype="dynamicoutline">
+<!--
+  function getControlTag(src)
+  {
+    TRok = false
+    while ("HTML" != src.tagName)
+    {
+      if ("IMG" == src.tagName || "FONT" == src.tagName || "A" == src.tagName)
+        TRok = true
+      if ("LI" == src.tagName)
+        return src
+      if ("TR" == src.tagName)
+      {
+        if(TRok)
+          return src
+        return null
+      }
+      src = src.parentElement
+    }
+    return null
+  }
+  function dynOutlineEnabled(src)
+  {
+    while ("HTML" != src.tagName)
+    {
+      if("OL" == src.tagName || "UL" == src.tagName || "TABLE" == src.tagName)
+        if(null != src.getAttribute("dynamicoutline", false))
+          return true
+      src = src.parentElement
+    }
+    return false
+  }
+  function containedIn(src, dest)
+  {
+    while ("HTML" != src.tagName)
+    {
+      if (src == dest)
+        return true
+      src = src.parentElement
+    }
+    return false
+  }
+  function dynOutline()
+  {
+    var ms = navigator.appVersion.indexOf("MSIE");
+    ie4 = (ms>0) && (parseInt(navigator.appVersion.substring(ms+5, ms+6)) >= 4);
+    if(!ie4)
+        return;
+    var src = event.srcElement
+    src = getControlTag(src)
+    if (null == src)
+      return
+    if (!dynOutlineEnabled(src))
+      return
+    var idx = src.sourceIndex+1
+    while (idx < document.all.length && containedIn(document.all[idx].parentElement, src))
+    {
+      srcTmp = document.all[idx]
+      tag = srcTmp.tagName
+      if ("UL" == tag || "OL" == tag || "TABLE" == tag)
+        srcTmp.style.display = srcTmp.style.display == "none" ? "" : "none"
+      idx++;
+    }
+  }
+//-->
+</script></head>
+
+<body bgcolor="#FFFFFF" text="#000000" vlink="#E02020" link="#2020F0" onclick="dynOutline()">
+<div align="center"><center>
+
+<table width="665">
+<!-- page headers ------------------------------------------------------- -->
+  <tr>
+    <td width="661"><h1 align="left"><a href="/sigops/" target><img border="0" src="/sigops/images/sigops_s.gif" alt="SigOps: " width="257" height="64"></a><br>
+    OS Development Resources</h1>
+    </td>
+  </tr>
+<!-- section start ------------------------------------------------------ -->
+  <tr>
+    <td width="661"><br>
+    <hr>
+    <p><b>CODE SNIPPETS</b></p>
+    <blockquote>
+    </blockquote>
+    </td>
+  </tr>
+<!-- section start ------------------------------------------------------ -->
+<!-- section start ------------------------------------------------------ -->
+<!-- section start ------------------------------------------------------ -->
+  <tr>
+    <td width="661"><ul dynamicoutline start="1" type="disc">
+      <li><a href="mailto:pswanson@uiuc.edu">Paul Swanson</a>: Setting VGA mode<a href="vga.h">vga.h</a>, <a href="vga.cc">vga.cc</a></li>
+      <li><a href="mailto:swetland@neog.com">Brian Swetland</a>: <a href="snprintf.c">snprintf(...)</a></li>
+      <li><a href="mailto:drarmstr@uiuc.edu">Douglas Armstrong</a>: <a href="http://www.acm.uiuc.edu/sigops/rsrc/cursor.html">Moving the hardware cursor</a></li>
+      <li><a href="mailto:gilling@uiuc.edu">Erik Gilling</a>: <a href="http://www.acm.uiuc.edu/sigops/rsrc/depend.html">Calculating dependencies automatically</a></li>
+      <li><a href="mailto:drarmstr@uiuc.edu">Douglas Armstrong</a>: <a href="http://www.acm.uiuc.edu/sigops/rsrc/reboot.c">Rebooting the computer</a></li>
+      <li><a href="mailto:gilling@uiuc.edu">Erik Gilling</a>: <a href="keyreset.c">initializing the keyboard</a></li>
+      <li><a href="mailto:swetland@frotz.net">Brian Swetland</a>: <a href="detect.c">Detecting Monochrome / VGA</a></li>
+      <li> : <a href="http://www.acm.uiuc.edu/sigops/rsrc/chksum.html">Computing the IP / ICMP checksum</a></li>
+      <li> : <a href="gdt.c">lgdt() / sgdt()</a></li>
+      <li><a href="mailto:swetland@frotz.net">Brian Swetland</a>: <a href="boot.html">Booting using the SigOps netboot system</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.frotz.net/openblt/blt.aug25.tgz">(a tarball of OpenBLT containing the code)</a></li>
+      <li><a href="mailto:gilling@uiuc.edu">Erik Gilling</a>: The DemOS sample OS: <a href="demos/demos-week2.tar.gz">week2</a></li>
+    </ul>
+    <hr>
+    <p><b>HOW TO</b></p>
+    <blockquote>
+    </blockquote>
+    </td>
+  </tr>
+<!-- footer start ------------------------------------------------------- -->
+  <tr>
+    <td width="661"><ul start="1" type="disc">
+      <li><a href="http://www.acm.uiuc.edu/sigops/rsrc/cvs.html">Using CVS with your os source</a></li>
+      <li><a href="http://www.rt66.com/~brennan/djgpp/djgpp_asm.html">Inline Assembly with DJGPP</a></li>
+    </ul>
+    <hr>
+    <p><b>DOCUMENTS</b></p>
+    <blockquote>
+    </blockquote>
+    </td>
+  </tr>
+  <tr>
+    <td width="661"><ul start="1" type="disc">
+      <li><a href="pfmt11.pdf">ELF Specification</a></li>
+      <li><a href="http://www.national.com/pf/DP/DP8390D.html">DP8390D Network Interface
+        Controller - NE2000</a></li>
+      <li><a href="http://www.national.com/an/AN/AN-475.pdf">AN-475: DP8390 Network Interface
+        Controller: An Introductory Guide</a></li>
+      <li><a href="http://www.national.com/an/AN/AN-874.pdf">AN-874: Writing Drivers for the
+        DP83902 &amp; DP83905 Ethernet Controllers</a> </li>
+    </ul>
+    <hr>
+    <p><b>INFORMATION</b></p>
+    <blockquote>
+    </blockquote>
+    </td>
+  </tr>
+  <tr>
+    <td width="661"><ul dynamicoutline start="1" type="disc">
+      <li><a href="http://www.x86.org/secrets/intelsecrets.htm">Intel Secrets</a></li>
+    </ul>
+    <hr>
+    <p><b>OS SURVEY</b></p>
+    <blockquote>
+    </blockquote>
+    </td>
+  </tr>
+  <tr>
+    <td width="661"><ul start="1" type="disc">
+      <li><a href="http://sunsite.unc.edu/linux-source/">Linux Source Navigator</a></li>
+      <li><a href="http://www.redhat.com:8080/HyperNews/get/khg.html">Linux Kernel Hacker's Guide</a></li>
+    </ul>
+    <hr>
+    <p align="center">[ <a href="file:///">SigOps Home</a> | <a href="file:///">ACM@UIUC Home</a>
+    | <a href="file:///search/index.html">Search Our Pages</a> | <a href="mailto:sigops@uiuc.edu">Feedback</a> ] <br>
+    <br>
+    Copyright (c) 1996, 1997 ACM@UIUC </p>
+    <div align="center"><center><address>
+      http://www.acm.uiuc.edu<!--#echo var="DOCUMENT_URI" --> <br>
+      Last Modified: <!--#echo var="LAST_MODIFIED" --> October 5, 1997&nbsp; / <a href="mailto:sigops@acm.uiuc.edu">sigops@acm.uiuc.edu</a>
+    </address>
+    </center></div></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>
+<!-- end of sigops webpage ---------------------------------------------- -->

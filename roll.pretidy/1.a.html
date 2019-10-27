@@ -1,0 +1,112 @@
+<!-- sigops webpage ----------------------------------------------------- -->
+<HTML>
+<HEAD>
+<TITLE>Compiling the Kernel</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" VLINK="#e02020" LINK="#2020f0">
+<CENTER>
+<TABLE WIDTH=600>
+
+<!-- page headers ------------------------------------------------------- -->
+<TR><TD>
+<h1 align="left"><A HREF="/sigops/"><IMG BORDER=0 SRC="/sigops/images/sigops_s.gif" ALT="SigOps: "></A><BR>Compiling the Kernel</h1>
+<h3 align="left">(the first part of the first chapter in our series on <i>How to Write an 
+Operating System</i>)</h3>
+</TD></TR>
+
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>The Entry Point</B><BLOCKQUOTE>
+
+<p>In applications programming, the main() function is usually described
+as the first function to receive control.  However, the real entry
+is a function called _start(), and is typically defined by crt1.o.
+This _start() sets up the environment, opens the default descriptors,
+and then calls the application's main() function.  But for an
+operating system, there isn't any crt1.o (at least, not yet),
+and so you will need to supply your own _start function as the
+entry point, instead of main().
+</p>
+
+<p>In the the first loaded file (which should be a statically
+linked executable), our boot loader expects a declaration of
+_start as follows:
+
+<pre><code>
+
+void _start(int memSize,  /* total amount of memory installed in bytes */
+            char *parms,  /* ASCIIZ string typed at the boot prompt */
+            struct boot_dir *loadedfiles);
+
+</code></pre>
+The last parameter, <code>loadedfiles</code>, is struct of
+type <code>boot_dir</code> which is a structure that contains an array
+of "file" objects that contain pointers to the individual files.  A
+description of the <a href="../rsrc/boot.html">bootloader system</a>
+is a must look at to get the os
+properly booted.
+</p>
+
+<p>You need to compile your kernel into either an ELF
+executable format.  The raw kernel file will always be loaded at
+0x100000 (1MB), so the text and data segment locations in the file
+need to coincide with their locations in memory.  For ELF, specifying
+the options '-dN -Ttext 0x100080' to ld will assign space to common
+symbols in the file, merge the text and data segments, and start
+the text segment immediately after the header (which is where it
+is in the file anyway).  For the new uBoot system, the entry point needs
+to be at 0x101080 because the first 4K is taken by the boot directory entry
+Note that the linker does not have
+to create the output binary in this way;  however, for reasons
+of simplicity, the boot loader does not actually interpret the
+kernel binary.
+</p>
+
+</BLOCKQUOTE></TD></TR>
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>Exiting the Kernel</B><BLOCKQUOTE>
+
+<p>
+The easiest way to return to DOS is simply to leave the _start()
+function.  However, this may not be possible in an exception
+handler before you have context switching.  So, an alternative
+method (and also a very messy one) is to save the frame pointer
+(%ebp) in the _start() function to a global variable, and then
+restore that value <b>plus 4</b> to the stack register (%esp),
+immediately followed by a return.  This looks like this:
+
+<ul><li>To save %ebp (must be in the _start function):
+<pre>
+<code>asm ("mov %%ebp, %0":"=m" (oldEBP));</code>
+</pre>
+<li>To return to the bootloader:
+<pre>
+<code>asm ("mov %0, %%esp; ret": :"r" (oldEBP + 4));</code>
+</pre>
+</ul>
+
+where oldEBP is declared as a global unsigned integer.
+</p>
+</BLOCKQUOTE></TD></TR>
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>Compiling the Kernel</B><BLOCKQUOTE>
+
+<p>The <a href="code/Makefile">Makefile</a> that we've provided will
+compile and link the kernel.
+</p>
+
+</BLOCKQUOTE></TD></TR>
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>Next Section</B><BLOCKQUOTE>
+
+<a href="1.helloworld.html">"Hello World" OS</a>
+
+</BLOCKQUOTE></TD></TR>
+<!-- footer start ------------------------------------------------------- -->
+<TR><TD><BR><HR>
+<!--#include virtual="/sigops/footer.html" -->
+</TD></TR>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>
+<!-- end of sigops webpage ---------------------------------------------- -->

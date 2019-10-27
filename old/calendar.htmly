@@ -1,0 +1,27 @@
+<!-- sigops webpage ----------------------------------------------------- -->
+<HTML>
+<HEAD>
+<TITLE>SigOps: Fall 200 Calendar</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" VLINK="#e02020" LINK="#2020f0">
+<CENTER>
+<TABLE WIDTH=600>
+
+<!-- page headers ------------------------------------------------------- -->
+<TR><TD>
+<h1 align="left"><A HREF="/sigops/"><IMG BORDER=0
+SRC="/sigops/images/sigops_s.gif" ALT="SigOps: "></A><BR>Calendar for Fall 2000</h1> </TD></TR>
+
+<!-- section start ------------------------------------------------------ -->
+<TR><TD><BR><HR><B>Calendar</B><BLOCKQUOTE>
+<TABLE>
+<TD>
+<TH>Aug. 29</TH>
+<TH>Introduction to SigOps, presentation of this calendar</TH>
+</TD>
+</TABLE>
+</BODY>
+</HTML>
+<!-- end of sigops webpage ---------------------------------------------- -->
+
+

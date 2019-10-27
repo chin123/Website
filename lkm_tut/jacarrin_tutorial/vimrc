@@ -1,0 +1,75 @@
+" Configuration file for vim
+
+set nocompatible        " Use Vim defaults (much better!)
+set showcmd             " Show (partial) command in status line.
+set showmatch           " Show matching brackets.
+set notimeout           " i like to enter commands slowly
+set ruler               " the ruler on the bottom is really useful      
+set nottimeout          " take as long as i like to type commands
+set ignorecase          " Do case insensitive matching
+set incsearch           " Incremental search
+set expandtab           " Get rid of tabs altogether and replace with spaces
+set autoindent          " always set autoindenting on
+set nofen               " disable folds
+set linebreak           " This displays long lines as wrapped at word boundries
+set wildmenu            " This is used with wildmode(full) to cycle options 
+set nobackup            " Don't keep a backup file
+set hidden              " This does not require the buffer to be saved all the time
+"set noswapfile          " this guy is really annoyoing sometimes
+set cscopequickfix=s-,c-,d-,i-,t-,e-,g-,f- "useful for cscope in quickfix
+set textwidth=0         " Don't wrap words by default
+set history=50          " keep 50 lines of command line history
+set whichwrap+=<,>,[,],h,l,~  "arrow keys can wrap in normal and insert modes
+set helpfile=$VIMRUNTIME/doc/help.txt "this may not be universal
+set backspace=2         " allow backspacing over everything in insert mode
+set matchtime=10
+set softtabstop=4       " Why are tabs so big?  This fixes it
+set shiftwidth=4                " dont indent like mad when editing code
+set cindent shiftwidth=4        " dont indent like mad when editing code
+"set guifont=Courier\ 10\ Pitch\ 10
+set ve=block            " let blocks be in virutal edit mode
+set laststatus=2        " always have status bar
+set foldmethod=indent   " use indent unless overridden
+set scrolloff=1         " dont let the curser get too close to the edge
+set textwidth=80        " This wraps a line with a break when you reach 80 chars
+"set wrapmargin=80      " When pasteing, use this, because textwidth becomes 0
+                        " wrapmargin inserts breaks if you exceed its value
+set wildmode=list:longest,full  "list all options, match to the longest
+                                "Then more tabs cycle through full completions
+set path=/usr/include 
+
+colorscheme darkblue    "better colors
+
+autocmd BufReadPost .z* set ft=zsh  "obscure zsh files need love too
+
+function! InsertTabWrapper(direction)
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<TAB>"
+    elseif a:direction == "backward"
+        return "\<c-n>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+
+inoremap <TAB> <c-r>=InsertTabWrapper("forward")<cr>
+inoremap <S-TAB> <c-r>=InsertTabWrapper("backward")<cr>
+
+fu! CscopeAdd() " Add Cscope database named .cscope.out
+    let dir = getcwd()
+    let savedir = getcwd()
+    wh (dir != '/')
+        let scopefile = dir . '/' . ".cscope.out"
+        if filereadable(scopefile)
+            exe "cs add " scopefile
+            exe "cd " savedir
+            return dir
+        en
+        cd ..
+        let dir = getcwd()
+    endw
+    exe "cd " savedir
+endf
+
+call CscopeAdd()    "cscope is where the loaded database is located

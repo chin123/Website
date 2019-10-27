@@ -1,0 +1,97 @@
+.TH "Stack" 3 "16 Sep 2003" "Sample" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Stack \- 
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBstack\fP"
+.br
+.RI "\fIThis is a stack struct.\fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBpush\fP (\fBstack\fP s, int val)"
+.br
+.RI "\fIThis function is used to push stuff.\fP"
+.ti -1c
+.RI "int \fBpop\fP (\fBstack\fP s)"
+.br
+.RI "\fIThis pops.\fP"
+.ti -1c
+.RI "int \fBtop\fP (\fBstack\fP s)"
+.br
+.RI "\fITake a look at the top.\fP"
+.in -1c
+.SH "FUNCTION DOCUMENTATION"
+.PP 
+.SS "int pop (\fBstack\fP s)"
+.PP
+This pops.
+.PP
+It is used to pop stuff
+.PP
+\fBWarning: \fP
+.in +1c
+This can give you an error if there is nothing to pop 
+.PP
+\fBSee also: \fP
+.in +1c
+stack , push 
+.PP
+\fBParameters: \fP
+.in +1c
+.TP
+\fB\fIs\fP\fP
+the stack to get an element from
+.PP
+\fBReturns: \fP
+.in +1c
+.SS "int push (\fBstack\fP s, int val)"
+.PP
+This function is used to push stuff.
+.PP
+It puts stuff on the end.
+.PP
+\fBBug: \fP
+.in +1c
+this function rules too much 
+.PP
+\fBParameters: \fP
+.in +1c
+.TP
+\fB\fIs\fP\fP
+This is the stack to push onto 
+.TP
+\fB\fIval\fP\fP
+This is the value to push
+.PP
+\fBReturns: \fP
+.in +1c
+.TP
+a non-negative value indicates success
+.TP
+a negative return value indicates that the push was not successful
+.TP
+The - creates a bullet list 
+.PP
+\fBExamples: \fP
+.in +1c
+\fBstack_example.c\fP.
+.PP
+Definition at line 13 of file stack.c.
+.PP
+References stack::end, and stack::stack.
+.SS "int top (\fBstack\fP s)"
+.PP
+Take a look at the top.
+.PP
+This is another way to do documentation. It is better to put the documentation in the source, because then you can edit them together.
+.PP
+\fBReturns: \fP
+.in +1c
+The top of the stack 

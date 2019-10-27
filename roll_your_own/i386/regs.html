@@ -1,0 +1,168 @@
+<HTML>
+<HEAD>
+<title>32-bit Register Set</title>
+</HEAD>
+
+<body>
+<H1><CENTER>The Intel 32-bit Register Set</center></h1>
+
+<hr>
+
+<a name="eflags"><h2>eFlags</h2></a>
+
+<table border>
+<tr>
+<td colspan=10>31
+<td colspan=2>21
+<td colspan=4 align=right>16
+<td colspan=4>15
+<td colspan=4 align=right>8
+<td colspan=4>7
+<td colspan=4 align=right>0
+</tr>
+<tr><td colspan=10>Reserved
+<td>ID <td>VIP <td>VIF <td>AC <td>VM <td>RF <td>0 <td>NT <td colspan=2>IOPL
+<td>OF <td>DF <td>IF <td>TF <td>SF <td>ZF <td>0 <td>AF <td>0 <td>PF
+<td>1 <td>CF </tr>
+</table>
+
+<br>
+
+<table border>
+<tr><th>Bit<th>Name<th>Description</tr>
+<tr><td>8<td>Trap Flag (TF)<td>Single-step mode active when set.</tr>
+<tr><td>9<td>Interrupt Flag (IF)<td>Interrupts allowed when set.</tr>
+<tr><td>10<td>Direction Flag (DF)<td>Auto-increment string operatings when clear, auto-decrement when set.</tr>
+<tr><td>12-13<td>I/O Privilege Level (IOPL)<td>Privilege level needed to do I/O instructions.
+<tr><td>14<td>Nested Task (NT)<td>If set, IRET back-switches.</tr>
+<tr><td>16<td>Resume Flag (RF)<td>Flag to ensure single-step only happens once per instruction.</tr>
+<tr><td>17<td>Virtual 8086 Mode (VM)<td>When set, CPU operates in pseudo-real mode.
+<tr><td>18<td>Alignment Check (AC)<td>If set and CR0[AM] = 1, alignment checks are made.</tr>
+<tr><td>19<td>Virtual Interrupt Flag (VIF)<td> </tr>
+<tr><td>20<td>Virtual Interrupt Pending (VIP)<td> </tr>
+<tr><td>21<td>CPU Identification (ID)<td>Modifiable if CPU supports CPUID instruction.</tr>
+</table>
+
+<hr>
+
+<a name="cr0"><h2>Control Register 0 (CR0)</h2></a>
+
+<table border>
+<tr>
+<td>31
+<td>30
+<td>29
+<td colspan=10 align=center>28...19
+<td>18
+<td>17
+<td>16
+<td colspan=10 align=center>15...6
+<td>5
+<td>4
+<td>3
+<td>2
+<td>1
+<td colspan=1 align=right>0
+<tr><td>PG
+<td>CD
+<td>NW
+<td colspan=10>0
+<td>AM
+<td>0
+<td>WP
+<td colspan=10>0
+
+<td>NE
+<td>ET
+<td>TS
+<td>EM
+<td>MP
+<td>PE
+</tr>
+</table>
+
+<br>
+<table border>
+<tr><th>Bit<th>Name<th>Description</tr>
+<tr><td>0<td>Protection Enable (PE)<td>If set, operates in protected-mode.</tr>
+<tr><td>1<td>Math Present (MP)<td>Set if coprocessor present.</tr>
+<tr><td>2<td>Emulate Numeric Extension (EM)<td>When set, FP instructions may be emulated in software.</tr>
+<tr><td>3<td>Task Switched (TS)<td>Set after a task-switch.</tr>
+<tr><td>4<td>Extension Type (ET)<td>Set if 387 or higher coprocessor.</tr>
+<tr><td>5<td>Numeric Error Enable (NE)<td>If set, generates exception 16 on coprocessor error.</tr>
+<tr><td>16<td>Write Protect (WP)<td>When set, enforces read-only pages for the kernel.</tr>
+<tr><td>18<td>Alignment Mask (AM)<td>When set, can generate AC exception.</tr>
+<tr><td>29<td>Not Write-Through (NW)<td> </tr>
+<tr><td>30<td>Cache Disable (CD)<td> </tr>
+<tr><td>31<td>Paging Enable (PG)<td>When set, operates in paged mode</tr>
+</table>
+
+<a name="segments"><h2>Segment Registers</h2></a>
+
+<p>The 6 segment registers are all loaded with a segment selector, 
+which is an offset into either the GDT or the current LDT.  A segment
+selector is only 16 bits long and looks like this:
+
+<table border>
+<tr><td align=center>15 ... 3<td align=center>2<td align=center>1 .. 0</tr>
+<tr><th>index into GDT or LDT<th>TI<th>RPL</tr>
+</table>
+
+<p>The <b>Table Indicator (TI) bit</b> indicates to the processor where to
+look for the specified selector.  If this bit is set, the processor 
+checks the LDT (Local Descriptor Table); if clear, the processor 
+looks in the GDT (Global Descriptor Table).
+
+<p>The <b>Requested Privilege Level (RPL)</b> for a selector is checked
+when it is loaded into a segment register.  The CPL must be at 
+least as privileged as the RPL, which must be at least as privileged
+as the DPL.  For instance, an application (CPL 3) can load a
+data segment with a DPL of 3, as long as it sets the lowest 2 bits,
+setting the RPL to 3 also.  It cannot load a data segment with DPL 0.
+The kernel (CPL 0) can load any data segment (from DPL 0 to DPL 3),
+as long as it correctly sets the RPL.  For DPL 3, this means an RPL
+of 3;  for DPL 0, either RPL 0 or RPL 3 could be used.
+</p>
+
+<p><b>CS</b> is short for the Code Segment and must be set to an executable 
+segment.  <b>The privilege level set in CS is the privilege level of 
+the running program (also called the CPL, or current privilege level).</b>
+
+<p>The segment registers <b>DS, ES, FS, GS</b> are all meant for data and should
+all be set to a data segment (most likely writable).  The privilege
+levels requested by each of these selectors (the RPL, or requested
+privilege level) must be greater (less privileged) than the CPL.
+</p>
+
+<p><b>SS</b> is short for the Stack Segment and must be set to a writable data 
+segment. </p>
+
+<h2>General Purpose Registers</h2>
+
+<p>The i386 has 8 registers which are referred to as the general 
+purpose registers, even though all of them have some
+specialized purpose for some instructions.  This is their story:
+
+<ul>
+<li><b>EAX</b>: the accumulator
+<li><b>EBX</b>: the base register
+<li><b>ECX</b>: the count register
+<li><b>EDX</b>: the data register
+<li><b>ESI</b>: the source index
+<li><b>EDI</b>: the destination index
+<li><b>EBP</b>: the base pointer
+<li><b>ESP</b>: the stack pointer
+</ul>
+
+<h2>Instruction Pointer and CR3</h2>
+<ul>
+<li><b>EIP</b> is the 32-bit Instruction Pointer.
+<li><b>CR3</b> (short for Control Register 3) is an alias for the 
+<a href="7.a.html#PDBR">Page Directory Base Register</a>.  
+</ul>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

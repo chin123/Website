@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<title>i386 PC Text Mode Information</title>
+</HEAD>
+
+<body BGCOLOR="ffffff">
+<H1><CENTER>i386 PC Text Mode Information</center></h1>
+
+<hr>
+
+<a name="vidmem"><h2>Video Memory Structure</h2></a>
+
+<p>The text mode video screen in the PC is memory-mapped to physical address 
+<b>0xb0000</b> on monochrome adapters and <b>0xb8000</b> on color adapters.
+(Our PCs all have color adapters, and most likely any machine you find will
+too.  I merely include the monochrome adapter information for completeness).
+</p>
+
+<p>
+You can access a specific physical address in the PC by merely assigning
+it to a pointer, and then treating the pointer as a reference to an
+array.  Assigning a numeric value to a pointer is just a matter of using
+a typecast:
+
+<pre><code>char *vidmem = (char *) 0xb8000;</code></pre>
+
+<p>The text mode is 80 columns by 25 rows, with 2 bytes per character
+that appears on the screen.  The first byte is the ASCII value of 
+the character itself, and the second is the attribute byte.  0x07 is 
+white on black, and works fine.  You may want to experiment with 
+other colors.
+</p>
+
+<h2 name="cursor">Cursor manipulation</h2>
+
+<p>The cursor can be moved.  Check out our <a href="../../rsrc/">code 
+snippets resource.</a>
+
+<hr>
+<!--#include virtual="/include/footer.html" -->
+</BODY>
+</HTML>
+

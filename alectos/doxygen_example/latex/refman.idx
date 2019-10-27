@@ -1,0 +1,32 @@
+\indexentry{Stack@{Stack}|hyperpage}{11}
+\indexentry{Stack@{Stack}!pop@{pop}|hyperpage}{11}
+\indexentry{pop@{pop}!Stack@{Stack}|hyperpage}{11}
+\indexentry{Stack@{Stack}!push@{push}|hyperpage}{12}
+\indexentry{push@{push}!Stack@{Stack}|hyperpage}{12}
+\indexentry{Stack@{Stack}!top@{top}|hyperpage}{12}
+\indexentry{top@{top}!Stack@{Stack}|hyperpage}{12}
+\indexentry{stack@{stack}|hyperpage}{13}
+\indexentry{end@{end}!stack@{stack}|hyperpage}{13}
+\indexentry{stack@{stack}!end@{end}|hyperpage}{13}
+\indexentry{id@{id}!stack@{stack}|hyperpage}{13}
+\indexentry{stack@{stack}!id@{id}|hyperpage}{13}
+\indexentry{stack@{stack}!helper@{helper}|hyperpage}{14}
+\indexentry{helper@{helper}!stack@{stack}|hyperpage}{14}
+\indexentry{stack@{stack}!stack@{stack}|hyperpage}{14}
+\indexentry{stack@{stack}!stack@{stack}|hyperpage}{14}
+\indexentry{stack@{stack}!start@{start}|hyperpage}{14}
+\indexentry{start@{start}!stack@{stack}|hyperpage}{14}
+\indexentry{stack.c@{stack.c}|hyperpage}{15}
+\indexentry{stack.c@{stack.c}!pop@{pop}|hyperpage}{15}
+\indexentry{pop@{pop}!stack.c@{stack.c}|hyperpage}{15}
+\indexentry{stack.h@{stack.h}|hyperpage}{17}
+\indexentry{EXAMPLE@{EXAMPLE}!stack.h@{stack.h}|hyperpage}{17}
+\indexentry{stack.h@{stack.h}!EXAMPLE@{EXAMPLE}|hyperpage}{17}
+\indexentry{EXAMPLE2@{EXAMPLE2}!stack.h@{stack.h}|hyperpage}{17}
+\indexentry{stack.h@{stack.h}!EXAMPLE2@{EXAMPLE2}|hyperpage}{17}
+\indexentry{stack.h@{stack.h}!ENOMEM@{ENOMEM}|hyperpage}{18}
+\indexentry{ENOMEM@{ENOMEM}!stack.h@{stack.h}|hyperpage}{18}
+\indexentry{stack.h@{stack.h}!get_elem@{get\_\discretionary {-}{}{}elem}|hyperpage}{18}
+\indexentry{get_elem@{get\_\discretionary {-}{}{}elem}!stack.h@{stack.h}|hyperpage}{18}
+\indexentry{stack.h@{stack.h}!push@{push}|hyperpage}{18}
+\indexentry{push@{push}!stack.h@{stack.h}|hyperpage}{18}

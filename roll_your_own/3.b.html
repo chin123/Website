@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title>Application Loading</title>
+  </head>
+
+  <body>
+    <center>
+      <h1>Application Loading</h1>
+    </center>
+
+    <center>
+      <h3>the second part of the third chapter in our series on <i>How to
+      Write an Operating System</i></h3>
+    </center>
+    <hr>
+
+    <h2>Reason for Being</h2>
+
+    <p>Up until this point, we have just been working with the operating
+    system kernel. However, an operating system is only useful in that it
+    will support a variety of different application programs (often at the
+    same time).</p>
+
+    <p>To that end, the kernel needs to be separated from the application
+    programs it's running, for both generality and protection.</p>
+
+    <h2>Application Loading</h2>
+    The operating system kernel needs some way of loading processes into
+    memory. Usually this requires knowledge of a filesystem and hardware
+    driver, which is a big hurdle, but luckily, the boot loader for this
+    project can load additional files. Your kernel merely needs to interpret
+    the binary format and start executing the code. 
+
+    <h4>ELF Specification</h4>
+    ELF is much more complex than just a header that confirms the format and
+    tells you where to jump. For more information, get this <a href=
+    "papers/elf11g.ps.gz">technical specification</a>. 
+
+    <h2>Application Execution</h2>
+    Still under construction. 
+    <hr>
+    <!--#include virtual="/include/footer.html" -->
+  </body>
+</html>
+

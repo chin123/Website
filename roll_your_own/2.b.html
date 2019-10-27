@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title>Exception Handlers</title>
+  </head>
+
+  <body>
+    <center>
+      <h1>Debugging Methods</h1>
+    </center>
+
+    <center>
+      <h3>Exception Handlers</h3>
+    </center>
+    <hr>
+
+    <h2>Exceptions</h2>
+
+    <p>Modern processors are able to detect and possibly recover from serious
+    faults in executable code. Programs that access unmanaged memory (or
+    write to read-only memory), divide by zero, execute invalid instructions,
+    or other major faults caught by the processor are transferred to an
+    <i>exception handler</i>, usually provided by the operating system. The
+    exception handler is at least responsible for stopping the program from
+    causing any more damage (usually by killing the process), and fixing the
+    problem if possible.</p>
+
+    <p>Hardware interrupts and system calls are also typically managed with
+    the same processor mechanisms as exceptions.</p>
+
+    <h2>Processor Implementations</h2>
+
+    <ul>
+      <li><a href="i386/idt.html">i386</a></li>
+    </ul>
+    <hr>
+    <!--#include virtual="/include/footer.html" -->
+  </body>
+</html>
+

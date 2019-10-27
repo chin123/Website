@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>FTP File System</title>
+</head>
+
+<body>
+
+<center>
+<p align=center>
+<h1> 
+
+The SIGOPS FTP Filesystem
+<img align=center src="ftpfs.gif">
+
+</center>
+</p align=center> </h1>
+
+The SIGOPS group of the ACM is currently working on an FTP filesystem.  This
+filesystem will allow users and UNIX applications to access files via anonymous
+FTP as if they were regular files in the filesystem.
+<p>
+
+<hr>
+Current Status: 10-24-96<p>
+
+Our first order of business is to get a piece of equipment to work on.  Our current plan is to use a Sparc SLC running Linux.  We are currently trying to install Linux on the SLC.
+<hr>
+At our last meeting, we looked over the
+<a HREF="ftp://alex.sp.cs.cmu.edu/www/alex.html">ALEX File System.</a>
+  This is a similar
+program that implements an FTP filesystem by using an NFS file server.
+The ALEX system replaces the NFS file server with a program that translates
+between the NFS and FTP protocals.
+<p>
+
+This method makes ALEX very portable, but may degrade performance.  As a
+project, SIGOPS
+chose to implement a similar system, but to make it a part of the kernel.
+<p>
+
+Currently, we are attempting to find equipment that we can use for this
+project.  We are also investigating how a filesystem is implemented and
+how to use networking from within the UNIX kernel.
+
+</body>
+</html>
+

@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st March 2002), see www.w3.org">
+
+    <title>Technical Information about the Boot Loader</title>
+  </head>
+
+  <body bgcolor="ffffff">
+    <center>
+      <h1>Technical Information about the Boot Loader</h1>
+    </center>
+
+    <center>
+      <h3>a supplemental section in the first chapter in our series on <i>How
+      to Write an Operating System</i></h3>
+    </center>
+    <hr>
+
+    <h2>What the bootloader does for you:</h2>
+
+    <ul>
+      <li>puts the i386 into protected mode</li>
+
+      <li>counts available memory</li>
+
+      <li>loads the SBBB image or runs the netboot system</li>
+
+      <li>maps in pages to give you access to all of physical memory (up to
+      252MB worth)</li>
+
+      <li>creates a boot page table, with identity mapped memory (so it looks
+      like you're in physical memory mode), <b>except</b> for page 0 (this is
+      used to catch null references).</li>
+
+      <li>creates a boot stack (for function calls and local variables)</li>
+
+      <li>passes execution to the entry point specified in the SBBB
+      directory. This is user customizable in the .ini file for
+      bootmaker.</li>
+    </ul>
+
+    <p>When calling the _start function in the first file, the boot loader
+    passes as parameters the amount of memory it counted, the parameter
+    string, a pointer to the SBBB/Directory.</p>
+
+    <h2><a name="predefsel">Segment Selectors in the GDT</a></h2>
+
+    <p>All of the segments defined by the boot loader allow use of the entire
+    32-bit address space from 0-4GB. In the following descriptions,
+    <i>kernel</i> means ring 0 and <i>user</i> means ring 3. These are just
+    some recommended segments, the uBoot loader is not garenteed to setup
+    these segments for you. Remember, one of the first things you should do
+    in your booting proccess is to construct the GDT that you will use.</p>
+
+    <ul>
+      <li>0x08 - kernel 32-bit code segment</li>
+
+      <li>0x10 - kernel 32-bit data segment</li>
+
+      <li>0x18 - kernel 32-bit stack segment (not necessary)</li>
+
+      <li>0x20 - kernel 16-bit code segment (used for return to real
+      mode)</li>
+
+      <li>0x28 - kernel 16-bit stack segment (used for return to real
+      mode)</li>
+
+      <li>0x33 - user 32-bit code segment (RPL of 3)</li>
+
+      <li>0x3b - user 32-bit data segment (RPL of 3)</li>
+
+      <li>0x43 - user 32-bit stack segment (RPL of 3)</li>
+    </ul>
+
+    <h2>Returning to DOS</h2>
+
+    <p>To return cleanly to DOS, you need to make sure that:</p>
+
+    <ul>
+      <li>the lower 1MB of memory isn't torn up;</li>
+
+      <li>the GDTR is restored (or at least, the first 6 entries (48 or 0x30
+      bytes) are what they were when the kernel gained control;</li>
+
+      <li>PIC1 is set at 08h, PIC2 at 70h, with all interrupts unmasked.</li>
+    </ul>
+    You don't need to worry about the last two items, unless you've changed
+    the GDT or the PIC registers (you can't do this without some serious
+    effort). However, staying out of the lower 1MB of memory is a bit
+    tougher, even with NULL references taken care of. <br>
+     <br>
+     
+
+    <h2>The Executable and Linking Format (ELF)</h2>
+
+    <p>You can get a copy of the Executable and Linking Format (ELF)
+    specification <a href="papers/elf11.ps.gz">here</a>.</p>
+
+    <h2>Source Code</h2>
+    Check out the <a href=
+    "ftp://ftp.acm.uiuc.edu/pub/sigops/bootsrc.tar.gz">assembly source
+    code</a> for the boot loader. (Note: this is older source code for the
+    boot.com that is not compatible with the new uBoot system. that source
+    code should be up shortly, we apologize for any inconvenience.) 
+    <hr>
+    <!--#include virtual="/include/footer.html" -->
+  </body>
+</html>
+
