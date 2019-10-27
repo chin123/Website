@@ -1,85 +1,129 @@
-<!doctype html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- -= SIGOps =- Website++++
+   *  FileName          :     index.shtml
+   *  Last Modified By  :     vramesh2
+---- -->
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<link rel="shortcut icon" href="img/favicon.ico"> 
-	<link rel="stylesheet" href="css/vendor/fluidbox.min.css">
-	<link rel="stylesheet" href="css/main.css">
-
-	<title>SIGOPS ACM@UIUC</title>
-
-</head>
+<!--#include virtual="head.shtml" -->
 <body>
-
-
-	<header>
-
-		<div id="logo-container">
-			<div id="logo"><a href="index.html"><img src="img/logo-256.png"></a></div>
-
-			<div id="subtitle">A Special Interest Group for Operating Systems</div>
-		</div>
- 		<nav id="logo-container">
-			<ul>
-				<li><a href="pages/tutorials.html">Tutorials</a></li>
-				<li><a href="pages/projects.html">Projects</a></li>
-				<li><a href="pages/about.html">About</a></li> 
-			</ul>
-		</nav>
-
-	</header>
-
-	<div id="content">
-
-		<section class="intro">
-			<h1>Welcome to SIGOPS<span class="nl"></span></h1>
-			<p>
-				We are a special interest group dedicated to Operating Systems, Distributed Computing, Systems Programming, and anything related to these topics.
-			</p>
-		</section>
-
-		<section class="row">
-			<div class="col-full">
-				<h2>Meeting Times</h2>
-				<p>
-					We meet every <b>Monday, at 7PM, in room 4405 at the Siebel Center.</b>
-				</p>
-			</div>
-		</section>
-
-
-		<section class="row">
-			<div class="col-full">
-				<h2>Contact</h2>
-				<p>
-					Questions? Concerns? Comments? Just send us an <a href="mailto:sigops-l@acm.Illinois.edu">email</a>.
-				</p>
-			</div>
-		</section>
-
-		<section class="row">
-			<div class="col-full">
-				<p>
-					2016 - A Special Interest Group of <a href="http://www-s.acm.illinois.edu">ACM@UIUC</a>
-				</p>
-			</div>
-		</section>
- 
-	</div>
-
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script>
-	if (!window.jQuery) 
-	{
-	    document.write('<script src="js/vendor/jquery.1.11.min.js"><\/script>');
-	}
-	</script>
-
-	<script src="js/vendor/jquery.fluidbox.min.js"></script>
-	<script src="js/main.js"></script>
+<div align="center">
+   <table width="800" border="1"
+   cellpadding="0" cellspacing="0" class="main_tab">
+      <tr>
+         <td>
+            <!--#include virtual="navigation.shtml" -->
+          </td>
+        </tr>
+        <tr>
+          <td height="206" colspan="2"><img src="./images/main_pic.jpg"
+          alt="SIGOps" width="800" height="221" /></td>
+        </tr>
+        <tr>
+          <td height="300" colspan="2" align="center" valign="middle"><table width="98%" height="95%" border="0" cellpadding="0" cellspacing="3">
+              <tr>
+                <td height="19" colspan="2" align="left"><p class="heading">WELCOME<hr/></p></td>
+              </tr>
+              <tr>
+                <td width="24%" height="246" align="left" valign="top" class="side_cell"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="3">
+                    <tr>
+                      <td height="33%" valign="top"><table width="100%" border="0" cellspacing="3" cellpadding="0">
+                          <tr>
+                            <td align="left"><p class="side_heading">EVENTS<hr/></p></td>
+                          </tr>
+                          <tr>
+                            <td align="left"><p>Meetings : <br/>
+                              Wednesday 7:00 PM in 1106 Siebel Center. </p>
+                              <!-- <p><a href="http://eoh.ec.uiuc.edu" target="_blank">Engineering Open House</a> : <br/>
+                              March 7 - 8 </p> -->
+                              </td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                    <tr>
+                      <td height="33%" valign="top"><table width="100%" border="0" cellspacing="3" cellpadding="0">
+                          <tr>
+                            <td align="left"><p class="side_heading">PROJECTS<hr/></p></td>
+                          </tr>
+                          <tr>
+                            <td height="33%" align="left" valign="top"><table width="100%" border="0" cellspacing="2" cellpadding="0">
+                              <tr>
+                                <td width="6%" valign="top"><p>&gt;&gt;</p></td>
+                                <td width="94%" valign="top"><p><a
+                                href="projects.shtml#dfe" target="_self">DFE -- Distributed Fish Environment</a></p>
+                                  </td>
+                              </tr>
+                              <tr>
+                                <td valign="top"><p>&gt;&gt;</p></td>
+                                <td valign="top"><p><a href="projects.shtml#rover" target="_self">SIGOps Rover</a></p></td>
+                              </tr>
+                              <tr>
+                                <td valign="top"><p>&gt;&gt;</p></td>
+                                <td valign="top"><p><a href="projects.shtml#alectos" target="_self">AlectOS</a></p></td>
+                              </tr>
+                            </table>                            </td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                    <tr>
+                      <td height="33%" valign="top"><table width="100%" border="0" cellspacing="3" cellpadding="0">
+                          <tr>
+                            <td align="left"><p class="side_heading">TALKS<hr/></p></td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="top"><table width="100%" border="0" cellspacing="2" cellpadding="0">
+                              <tr>
+                                <td width="6%" valign="top"><p>&gt;&gt;</p></td>
+                                <td width="94%" valign="top"><p><a
+                                href="talks.shtml#km_tut" target="_self">Linux Kernel Module Turotial </a></p></td>
+                              </tr>
+                              <tr>
+                                <td valign="top"><p>&gt;&gt;</p></td>
+                                <td valign="top"><p><a href="talks.shtml#roll_your_own" target="_self">How to Write Your Own Operating System</a></p></td>
+                              </tr>
+                            </table>
+                            </td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                </table></td>
+                <td width="76%" align="center" valign="top" class="main_cell"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="3">
+                  <tr>
+                    <td align="center" valign="top"><table width="95%" height="0" border="0" cellpadding="0" cellspacing="3">
+                      <tr>
+                        <td align="left" valign="top"><p class="small_heading">WELCOME<hr/></p></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="top"><p>Welcome to SIGOps.</p>
+                            <p>SIGOps is an <a href="http://acm.uiuc.edu" target="_blank">ACM</a> Special Interest Group for Operating Systems at the <a href="http://www.uiuc.edu" target="_blank">University Of Illinois Urbana - Champaign [UIUC]</a>. We take interest in anything to do with Operating Systems. New members are always welcome.</p>
+                          <p><br />
+                          </p></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="top"><p class="small_heading">NEWS<hr/></p></td>
+                      </tr>
+                      <tr>
+                        <td height="38" align="left" valign="top"><p>09.25.2007
+                            <br/>
+                            Redesigned the website to look pretty. Enjoy.</p></td>
+                      </tr>
+                      <tr>
+                        <td height="38" align="left" valign="top"><p>10.28.2007
+                            <br/>
+                            The <a href="http://www.acm.uiuc.edu/projects/SigOps/"> VoWFS Trac</a> is up. </p></td>
+                      </tr>
+                    </table></td>
+                  </tr>
+                </table>
+                  </td>
+              </tr>
+          </table></td>
+        </tr>
+        <!--#include virtual="footer.shtml" -->
+      </table></td>
+    </tr>
+  </table>
+</div>
 </body>
 </html>
-
